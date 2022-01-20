@@ -10,10 +10,11 @@ namespace DAL.Models
         public long MovieId { get; set; } 
         public string Title { get; set; }
         public long  CategoryId { get; set; }
+        public virtual Category Category { get; set; }
 
         public string Picture { get; set; }
 
-        public virtual Category Category { get; set; }
+        public virtual MovieDetail Detail { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Collection> Collections { get; set; }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-    public class MovieInfo
+    public class MovieDetail
     {
 
         public long MovieId { get; set; }
