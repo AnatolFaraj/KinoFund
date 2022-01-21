@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models
+namespace Core.Models
 {
     public class MovieDetail
     {
-
+        public long MovieDetailId { get; set; }
         public long MovieId { get; set; }
         public  Movie Movie { get; set; }
 

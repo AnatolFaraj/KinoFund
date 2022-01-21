@@ -1,15 +1,17 @@
-﻿using DAL.Models;
+﻿using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.data
+namespace DAL.data
 {
     public class MyContext : DbContext
     {
         public MyContext(DbContextOptions<MyContext> options) : base(options) { }
+
+        
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Collection> Collections { get; set; }
@@ -22,6 +24,13 @@ namespace Core.data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<User> Users { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
+            modelBuilder.Entity<Rating>().HasKey(x => new { x.UserId, x.MovieId });
+            
+
+
+        }
     }
 }

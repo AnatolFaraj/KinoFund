@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models
+namespace Core.Models
 {
     
     public class User
@@ -19,6 +19,7 @@ namespace DAL.Models
         public  ICollection<Collection> Collections { get; set; }
 
         public  ICollection<Rating> Ratings { get; set; }
+        public Credential Credential { get; set; }
 
     }
 }

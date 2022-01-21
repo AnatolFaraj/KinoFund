@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DAL.Models
+namespace Core.Models
 {
     public class Movie
     {
@@ -14,7 +14,7 @@ namespace DAL.Models
 
         public string Picture { get; set; }
 
-        public  MovieDetail Detail { get; set; }
+        public  MovieDetail MovieDetail { get; set; }
 
         public  ICollection<Comment> Comments { get; set; }
         public  ICollection<Collection> Collections { get; set; }
