@@ -13,8 +13,8 @@ namespace DAL.Models
         public DateTime Date { get; set; }
         public string Text { get; set; }
         public int RefersToCommentId { get; set; }
-        public virtual User User { get; set; }
-        public virtual Movie Movie { get; set; }
-        public virtual Comment RefersToNavigation { get; set; }
+        public  User User { get; set; }
+        public  Movie Movie { get; set; }
+        public  Comment RefersToNavigation { get; set; }
     }
 }

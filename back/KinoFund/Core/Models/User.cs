@@ -15,10 +15,10 @@ namespace DAL.Models
         public DateTime? DateOfBirth { get; set; }
         public UserType Type { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Collection> Collections { get; set; }
+        public  ICollection<Comment> Comments { get; set; }
+        public  ICollection<Collection> Collections { get; set; }
 
-        public virtual ICollection<Rating> Ratings { get; set; }
+        public  ICollection<Rating> Ratings { get; set; }
 
     }
 }
