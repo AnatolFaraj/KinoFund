@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -221,7 +221,8 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_RefersToCommentID",
                 table: "Comments",
-                column: "RefersToCommentID");
+                column: "RefersToCommentID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserID",

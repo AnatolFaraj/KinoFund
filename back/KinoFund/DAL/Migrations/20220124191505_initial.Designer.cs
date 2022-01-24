@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220124171558_Initial")]
-    partial class Initial
+    [Migration("20220124191505_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,7 +107,8 @@ namespace DAL.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.HasIndex("RefersToCommentId");
+                    b.HasIndex("RefersToCommentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -262,8 +263,8 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Models.Comment", "RefersToNavigation")
-                        .WithMany()
-                        .HasForeignKey("RefersToCommentId")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Comment", "RefersToCommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

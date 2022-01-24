@@ -105,7 +105,8 @@ namespace DAL.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.HasIndex("RefersToCommentId");
+                    b.HasIndex("RefersToCommentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -260,8 +261,8 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Models.Comment", "RefersToNavigation")
-                        .WithMany()
-                        .HasForeignKey("RefersToCommentId")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Comment", "RefersToCommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
