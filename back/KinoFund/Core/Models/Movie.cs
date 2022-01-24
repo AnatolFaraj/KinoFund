@@ -12,8 +12,6 @@ namespace Core.Models
         public long  CategoryId { get; set; }
         public  Category Category { get; set; }
 
-        public string Picture { get; set; }
-
         public  MovieDetail MovieDetail { get; set; }
 
         public  ICollection<Comment> Comments { get; set; }

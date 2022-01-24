@@ -9,7 +9,7 @@ namespace Core.Models
     public class Collection
     {
         public long CollectionId { get; set; }
-        public string CollectionName { get; set; }
+        public string Name { get; set; }
         public long UserId { get; set; }
         public  User User { get; set; }
 

@@ -7,7 +7,7 @@ namespace Core.Models
 {
     public class Credential
     {
-        public long CredentialId { get; set; }
+
         public long UserId { get; set; }
         public User User { get; set; }
         public long? ResetPasswordKey { get; set; }

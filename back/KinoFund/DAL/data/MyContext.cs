@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using DAL.Maps;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,17 @@ namespace DAL.data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Rating>().HasKey(x => new { x.UserId, x.MovieId });
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new CollectionConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            modelBuilder.ApplyConfiguration(new CredentialConfiguration());
+            modelBuilder.ApplyConfiguration(new MovieConfiguration());
+            modelBuilder.ApplyConfiguration(new MovieDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new RatingConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+
             
+
 
 
         }
