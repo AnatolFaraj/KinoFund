@@ -33,6 +33,9 @@ namespace DAL.Maps
             builder.Property(p => p.MovieId)
                    .HasColumnName("MovieID");
 
+            builder.Property(p => p.RefersToCommentId)
+                   .HasColumnName("RefersToCommentID");
+
 
 
 

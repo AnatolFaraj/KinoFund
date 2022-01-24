@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace WebAPI
 {
     public class Startup
@@ -42,6 +43,7 @@ namespace WebAPI
                 options => 
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("KinoFundDB"));
+                    
                 });
 
         }

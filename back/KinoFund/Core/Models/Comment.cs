@@ -14,7 +14,7 @@ namespace Core.Models
         public  Movie Movie { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }
-        public int RefersToCommentId { get; set; }
+        public long RefersToCommentId { get; set; }
         public  Comment RefersToNavigation { get; set; }
     }
 }

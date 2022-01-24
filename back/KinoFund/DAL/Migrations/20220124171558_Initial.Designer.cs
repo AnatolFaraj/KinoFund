@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220121171509_initial")]
-    partial class initial
+    [Migration("20220124171558_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,7 @@ namespace DAL.Migrations
                     b.Property<long>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
+                        .HasColumnName("CategoryID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
@@ -56,16 +57,18 @@ namespace DAL.Migrations
                     b.Property<long>("CollectionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
+                        .HasColumnName("CollectionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CollectionName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("UserID");
 
                     b.HasKey("CollectionId");
 
@@ -79,31 +82,32 @@ namespace DAL.Migrations
                     b.Property<long>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
+                        .HasColumnName("CommentID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("MovieID");
 
-                    b.Property<int>("RefersToCommentId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("RefersToNavigationCommentId")
-                        .HasColumnType("bigint");
+                    b.Property<long>("RefersToCommentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("RefersToCommentID");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("UserID");
 
                     b.HasKey("CommentId");
 
                     b.HasIndex("MovieId");
 
-                    b.HasIndex("RefersToNavigationCommentId");
+                    b.HasIndex("RefersToCommentId");
 
                     b.HasIndex("UserId");
 
@@ -112,9 +116,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Core.Models.Credential", b =>
                 {
-                    b.Property<long>("CredentialId")
+                    b.Property<long>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
+                        .HasColumnName("UserID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
@@ -129,13 +134,7 @@ namespace DAL.Migrations
                     b.Property<long?>("ResetPasswordKey")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CredentialId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasKey("UserId");
 
                     b.ToTable("Credentials");
                 });
@@ -143,15 +142,12 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.Property<long>("MovieId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MovieID");
 
                     b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Picture")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("bigint")
+                        .HasColumnName("CategoryID");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -165,9 +161,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Core.Models.MovieDetail", b =>
                 {
-                    b.Property<long>("MovieDetailId")
+                    b.Property<long>("MovieId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
+                        .HasColumnName("MovieID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Country")
@@ -176,19 +173,16 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PEGI")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("MovieDetailId");
-
-                    b.HasIndex("MovieId")
-                        .IsUnique();
+                    b.HasKey("MovieId");
 
                     b.ToTable("MovieDetails");
                 });
@@ -196,10 +190,12 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.Rating", b =>
                 {
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("UserID");
 
                     b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("MovieID");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
@@ -214,9 +210,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.User", b =>
                 {
                     b.Property<long>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("UserID");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -268,7 +263,9 @@ namespace DAL.Migrations
 
                     b.HasOne("Core.Models.Comment", "RefersToNavigation")
                         .WithMany()
-                        .HasForeignKey("RefersToNavigationCommentId");
+                        .HasForeignKey("RefersToCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Models.User", "User")
                         .WithMany("Comments")
@@ -283,17 +280,6 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Models.Credential", b =>
-                {
-                    b.HasOne("Core.Models.User", "User")
-                        .WithOne("Credential")
-                        .HasForeignKey("Core.Models.Credential", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.HasOne("Core.Models.Category", "Category")
@@ -302,18 +288,15 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Core.Models.MovieDetail", b =>
-                {
-                    b.HasOne("Core.Models.Movie", "Movie")
-                        .WithOne("MovieDetail")
-                        .HasForeignKey("Core.Models.MovieDetail", "MovieId")
+                    b.HasOne("Core.Models.MovieDetail", "MovieDetail")
+                        .WithOne("Movie")
+                        .HasForeignKey("Core.Models.Movie", "MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Movie");
+                    b.Navigation("Category");
+
+                    b.Navigation("MovieDetail");
                 });
 
             modelBuilder.Entity("Core.Models.Rating", b =>
@@ -335,18 +318,37 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Core.Models.User", b =>
+                {
+                    b.HasOne("Core.Models.Credential", "Credential")
+                        .WithOne("User")
+                        .HasForeignKey("Core.Models.User", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Credential");
+                });
+
             modelBuilder.Entity("Core.Models.Category", b =>
                 {
                     b.Navigation("Movies");
+                });
+
+            modelBuilder.Entity("Core.Models.Credential", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("MovieDetail");
-
                     b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("Core.Models.MovieDetail", b =>
+                {
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("Core.Models.User", b =>
@@ -354,8 +356,6 @@ namespace DAL.Migrations
                     b.Navigation("Collections");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("Credential");
 
                     b.Navigation("Ratings");
                 });
