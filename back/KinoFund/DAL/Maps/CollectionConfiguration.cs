@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class CollectionConfiguration : IEntityTypeConfiguration<Collection>
+    public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
     {
         public void Configure(EntityTypeBuilder<Collection> builder)
         {
+            builder.HasKey(x => x.CollectionId);
+
             builder.HasOne(x => x.User)
-                   .WithMany(x => x.Collections);
+                   .WithMany(x => x.Collections)
+                   .HasForeignKey(x => x.UserId);
 
             builder.HasMany(x => x.Movies)
                    .WithMany(x => x.Collections);

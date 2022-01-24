@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.HasKey(x => x.UserId);
+
             builder.HasMany(x => x.Comments)
                    .WithOne(x => x.User);
                    

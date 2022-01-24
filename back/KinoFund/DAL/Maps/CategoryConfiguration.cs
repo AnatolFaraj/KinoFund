@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
+            builder.HasKey(x => x.CategoryId);
+
             builder.HasMany(x => x.Movies)
                    .WithOne(x => x.Category);
 

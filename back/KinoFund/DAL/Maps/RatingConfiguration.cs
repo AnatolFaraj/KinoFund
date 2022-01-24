@@ -9,20 +9,19 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class RatingConfiguration : IEntityTypeConfiguration<Rating>
+    public class RatingConfiguration : IEntityTypeConfiguration<Rating>
     {
         public void Configure(EntityTypeBuilder<Rating> builder)
         {
-            builder.HasOne(x => x.Movie)
-                   .WithMany(x => x.Ratings);
-
-            builder.HasOne(x => x.User)
-                   .WithMany(x => x.Ratings);
-
-
             builder.HasKey(x => new { x.UserId, x.MovieId });
 
+            builder.HasOne(x => x.Movie)
+                   .WithMany(x => x.Ratings)
+                   .HasForeignKey(x => x.MovieId);
 
+            builder.HasOne(x => x.User)
+                   .WithMany(x => x.Ratings)
+                   .HasForeignKey(x => x.UserId);
 
             builder.Property(p => p.UserId)
                    .HasColumnName("UserID");

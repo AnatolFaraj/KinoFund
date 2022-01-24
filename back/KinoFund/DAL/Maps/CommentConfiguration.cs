@@ -9,19 +9,23 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
+            builder.HasKey(x => x.CommentId);
+
             builder.HasOne(x => x.User)
-                   .WithMany(x => x.Comments);
+                   .WithMany(x => x.Comments)
+                   .HasForeignKey(x => x.UserId);
 
             builder.HasOne(x => x.Movie)
-                   .WithMany(x => x.Comments);
+                   .WithMany(x => x.Comments)
+                   .HasForeignKey(x => x.MovieId);
 
             builder.HasOne(x => x.RefersToNavigation)
-                   .WithMany()
-                   .HasForeignKey(x => x.RefersToCommentId);
+                   .WithOne()
+                   .HasForeignKey<Comment>(x => x.RefersToCommentId);
 
 
             builder.Property(p => p.CommentId)

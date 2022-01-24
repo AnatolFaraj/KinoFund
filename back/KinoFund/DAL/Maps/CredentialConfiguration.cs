@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class CredentialConfiguration : IEntityTypeConfiguration<Credential>
+    public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
     {
         public void Configure(EntityTypeBuilder<Credential> builder)
         {

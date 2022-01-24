@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetail>
+    public class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetail>
     {
         public void Configure(EntityTypeBuilder<MovieDetail> builder)
         {
