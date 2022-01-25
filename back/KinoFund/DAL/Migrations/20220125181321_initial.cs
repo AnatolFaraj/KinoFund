@@ -21,43 +21,11 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Credentials",
+                name: "Users",
                 columns: table => new
                 {
                     UserID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResetPasswordKey = table.Column<long>(type: "bigint", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Credentials", x => x.UserID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MovieDetails",
-                columns: table => new
-                {
-                    MovieID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PEGI = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MovieDetails", x => x.MovieID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserID = table.Column<long>(type: "bigint", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false)
@@ -65,19 +33,14 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);
-                    table.ForeignKey(
-                        name: "FK_Users_Credentials_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Credentials",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
-                    MovieID = table.Column<long>(type: "bigint", nullable: false),
+                    MovieID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryID = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -89,12 +52,6 @@ namespace DAL.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Categories",
                         principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Movies_MovieDetails_MovieID",
-                        column: x => x.MovieID,
-                        principalTable: "MovieDetails",
-                        principalColumn: "MovieID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -120,6 +77,27 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Credentials",
+                columns: table => new
+                {
+                    UserID = table.Column<long>(type: "bigint", nullable: false),
+                    ResetPasswordKey = table.Column<long>(type: "bigint", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credentials", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_Credentials_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -129,7 +107,7 @@ namespace DAL.Migrations
                     MovieID = table.Column<long>(type: "bigint", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefersToCommentID = table.Column<long>(type: "bigint", nullable: false)
+                    RefersToCommentID = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -139,7 +117,7 @@ namespace DAL.Migrations
                         column: x => x.RefersToCommentID,
                         principalTable: "Comments",
                         principalColumn: "CommentID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Comments_Movies_MovieID",
                         column: x => x.MovieID,
@@ -151,6 +129,28 @@ namespace DAL.Migrations
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieDetails",
+                columns: table => new
+                {
+                    MovieID = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PEGI = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieDetails", x => x.MovieID);
+                    table.ForeignKey(
+                        name: "FK_MovieDetails_Movies_MovieID",
+                        column: x => x.MovieID,
+                        principalTable: "Movies",
+                        principalColumn: "MovieID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -222,7 +222,8 @@ namespace DAL.Migrations
                 name: "IX_Comments_RefersToCommentID",
                 table: "Comments",
                 column: "RefersToCommentID",
-                unique: true);
+                unique: true,
+                filter: "[RefersToCommentID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserID",
@@ -249,6 +250,12 @@ namespace DAL.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "Credentials");
+
+            migrationBuilder.DropTable(
+                name: "MovieDetails");
+
+            migrationBuilder.DropTable(
                 name: "Ratings");
 
             migrationBuilder.DropTable(
@@ -262,12 +269,6 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "MovieDetails");
-
-            migrationBuilder.DropTable(
-                name: "Credentials");
         }
     }
 }

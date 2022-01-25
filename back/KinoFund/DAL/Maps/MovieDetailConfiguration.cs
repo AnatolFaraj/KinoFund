@@ -18,7 +18,7 @@ namespace DAL.Maps
 
             builder.HasOne(x => x.Movie)
                    .WithOne(x => x.MovieDetail)
-                   .HasForeignKey<Movie>(x => x.MovieId);
+                   .HasForeignKey<MovieDetail>(x => x.MovieId);
 
             builder.Property(x => x.MovieId)
                    .HasColumnName("MovieID");

@@ -90,7 +90,7 @@ namespace DAL.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("MovieID");
 
-                    b.Property<long>("RefersToCommentId")
+                    b.Property<long?>("RefersToCommentId")
                         .HasColumnType("bigint")
                         .HasColumnName("RefersToCommentID");
 
@@ -106,7 +106,8 @@ namespace DAL.Migrations
                     b.HasIndex("MovieId");
 
                     b.HasIndex("RefersToCommentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[RefersToCommentID] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -116,10 +117,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.Credential", b =>
                 {
                     b.Property<long>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("UserID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("UserID");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -141,8 +140,10 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.Property<long>("MovieId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("MovieID");
+                        .HasColumnName("MovieID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint")
@@ -161,10 +162,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.MovieDetail", b =>
                 {
                     b.Property<long>("MovieId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("MovieID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MovieID");
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
@@ -209,8 +208,10 @@ namespace DAL.Migrations
             modelBuilder.Entity("Core.Models.User", b =>
                 {
                     b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("UserID");
+                        .HasColumnName("UserID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -262,9 +263,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Core.Models.Comment", "RefersToNavigation")
                         .WithOne()
-                        .HasForeignKey("Core.Models.Comment", "RefersToCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Core.Models.Comment", "RefersToCommentId");
 
                     b.HasOne("Core.Models.User", "User")
                         .WithMany("Comments")
@@ -279,6 +278,17 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Core.Models.Credential", b =>
+                {
+                    b.HasOne("Core.Models.User", "User")
+                        .WithOne("Credential")
+                        .HasForeignKey("Core.Models.Credential", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.HasOne("Core.Models.Category", "Category")
@@ -287,15 +297,18 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Models.MovieDetail", "MovieDetail")
-                        .WithOne("Movie")
-                        .HasForeignKey("Core.Models.Movie", "MovieId")
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Core.Models.MovieDetail", b =>
+                {
+                    b.HasOne("Core.Models.Movie", "Movie")
+                        .WithOne("MovieDetail")
+                        .HasForeignKey("Core.Models.MovieDetail", "MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
-                    b.Navigation("MovieDetail");
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("Core.Models.Rating", b =>
@@ -317,37 +330,18 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Models.User", b =>
-                {
-                    b.HasOne("Core.Models.Credential", "Credential")
-                        .WithOne("User")
-                        .HasForeignKey("Core.Models.User", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Credential");
-                });
-
             modelBuilder.Entity("Core.Models.Category", b =>
                 {
                     b.Navigation("Movies");
-                });
-
-            modelBuilder.Entity("Core.Models.Credential", b =>
-                {
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Models.Movie", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Ratings");
-                });
+                    b.Navigation("MovieDetail");
 
-            modelBuilder.Entity("Core.Models.MovieDetail", b =>
-                {
-                    b.Navigation("Movie");
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Core.Models.User", b =>
@@ -355,6 +349,8 @@ namespace DAL.Migrations
                     b.Navigation("Collections");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("Credential");
 
                     b.Navigation("Ratings");
                 });

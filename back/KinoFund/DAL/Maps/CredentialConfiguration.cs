@@ -17,7 +17,7 @@ namespace DAL.Maps
 
             builder.HasOne(x => x.User)
                    .WithOne(x => x.Credential)
-                   .HasForeignKey<User>(x => x.UserId);
+                   .HasForeignKey<Credential>(x =>  x.UserId);
 
 
 
