@@ -1,3 +1,4 @@
+using BLL.Movies;
 using BLL.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,7 @@ namespace WebAPI
                 });
 
             services.AddTransient<UsersManager>();
+            services.AddTransient<MoviesManager>();
 
         }
 
