@@ -1,3 +1,4 @@
+using BLL.Comments;
 using BLL.Movies;
 using BLL.Users;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,7 @@ namespace WebAPI
 
             services.AddTransient<UsersManager>();
             services.AddTransient<MoviesManager>();
+            services.AddTransient<CommentsManager>();
 
         }
 
