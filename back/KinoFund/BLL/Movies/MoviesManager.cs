@@ -1,4 +1,5 @@
 ﻿using Core.Dtos.Movies;
+
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,7 +30,7 @@ namespace BLL.Movies
                     Description = m.MovieDetail.Description,
 
                 }).OrderBy(t => t.Title).ToListAsync();
-
+            
             return new GetAllMoviesDTO
             {
                 Movies = movies,
@@ -45,6 +46,69 @@ namespace BLL.Movies
                 .FirstAsync(m => m.MovieId == movieId);
 
             return movieModel.ToDto();
+        }
+
+        public async Task<MovieDTO> EditMovieAsync(long movieId, MovieDTO movieModel)
+        {
+            var existingMovie = _dbContext.Movies
+                .Where(m => m.MovieId == movieModel.MovieId)
+                .FirstOrDefault();
+
+            if(existingMovie != null)
+            {
+                
+                existingMovie.Title = movieModel.Title;
+                existingMovie.MovieDetail.Description = movieModel.Description;
+
+                await _dbContext.SaveChangesAsync();
+            }
+            
+
+            return movieModel;
+            
+        }
+
+        public async Task<MovieDTO> CreateMovieAsync(MovieDTO movieModel)
+        {
+
+            _dbContext.Movies.Add(new Core.Models.Movie()
+            { 
+                MovieId = movieModel.MovieId,
+                Title = movieModel.Title,
+                
+                
+                
+                //todo: add description somehow
+                
+            });
+
+            await _dbContext.SaveChangesAsync();
+            return movieModel;
+        }
+
+
+        public async Task DeleteMovieAsync(long movieId)
+        {
+            var movie = _dbContext.Movies
+                .Where(m => m.MovieId == movieId)
+                .FirstOrDefault();
+
+            _dbContext.Movies.Remove(movie);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        
+
+        public async Task<MovieDTO> GetMovieAsync(long movieId)
+        {
+            var movie = await _dbContext.Movies.FindAsync(movieId);
+            
+            return new MovieDTO
+            { 
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Description = movie.MovieDetail.Description
+            };
         }
     }
 }

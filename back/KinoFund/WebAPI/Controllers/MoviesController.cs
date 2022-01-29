@@ -1,5 +1,6 @@
 ﻿using BLL.Movies;
 using Core.Dtos.Movies;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,5 +35,27 @@ namespace WebAPI.Controllers
             var movie = await _moviesManager.GetMovieInfoAsync(movieId);
             return movie;
         }
+
+        [HttpPut("{movieId}")]
+        public async Task<IActionResult> EditMovieAsync(long movieId, MovieDTO movieModel)
+        {
+            await _moviesManager.EditMovieAsync(movieId, movieModel);
+            return Ok(movieModel);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateMovieAsync(MovieDTO movieModel)
+        {
+             await _moviesManager.CreateMovieAsync(movieModel);
+            return Ok();
+        }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteMovieAsync(long movieId)
+        {
+            await _moviesManager.DeleteMovieAsync(movieId);
+            return Ok();
+        }
+
     }
 }
