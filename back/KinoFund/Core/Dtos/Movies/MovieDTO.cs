@@ -12,5 +12,7 @@ namespace Core.Dtos.Movies
         public string Title { get; set; }
         public string Description { get; set; }
 
+        public long Category { get; set; }
+
     }
 }

@@ -22,6 +22,26 @@ namespace DAL.Maps
 
             builder.Property(x => x.MovieId)
                    .HasColumnName("MovieID");
+
+            builder.HasData(
+                new MovieDetail
+                { 
+                    MovieId = 1L,
+                    Country = "USA",
+                    ReleaseDate = new DateTime(1994, 8, 21),
+                    PEGI = "18+",
+                    Picture = "someJPG",
+                    Description = "someDescription"
+                },
+                new MovieDetail
+                { 
+                    MovieId = 2L,
+                    Country = "USA",
+                    ReleaseDate = new DateTime(1980, 2, 13),
+                    PEGI = "16+",
+                    Picture = "SomeJPG",
+                    Description = "someDescription"
+                });
         }
     }
 }

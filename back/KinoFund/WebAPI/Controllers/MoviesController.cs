@@ -37,20 +37,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{movieId}")]
-        public async Task<IActionResult> EditMovieAsync(long movieId, MovieDTO movieModel)
+        public async Task<IActionResult> EditMovieAsync(long movieId, MovieInfoDTO movieModel)
         {
             await _moviesManager.EditMovieAsync(movieId, movieModel);
             return Ok(movieModel);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateMovieAsync(MovieDTO movieModel)
+        public async Task<IActionResult> CreateMovieAsync(MovieInfoDTO movieModel)
         {
              await _moviesManager.CreateMovieAsync(movieModel);
             return Ok();
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteMovieAsync(long movieId)
         {
             await _moviesManager.DeleteMovieAsync(movieId);

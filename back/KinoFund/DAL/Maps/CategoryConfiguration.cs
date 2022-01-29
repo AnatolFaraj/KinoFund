@@ -20,6 +20,17 @@ namespace DAL.Maps
 
             builder.Property(p => p.CategoryId)
                    .HasColumnName("CategoryID");
+
+            builder.HasData(
+                new Category 
+                { 
+                    CategoryId = 1,
+                    Name = "Comedy"
+                },
+                new Category
+                {   CategoryId = 2,
+                    Name = "Horror"
+                });
         }
     }
 }

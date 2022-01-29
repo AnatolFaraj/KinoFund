@@ -4,14 +4,16 @@ using DAL.data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220129124749_movieTest")]
+    partial class movieTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,26 +211,6 @@ namespace DAL.Migrations
                     b.HasKey("MovieId");
 
                     b.ToTable("MovieDetails");
-
-                    b.HasData(
-                        new
-                        {
-                            MovieId = 1L,
-                            Country = "USA",
-                            Description = "someDescription",
-                            PEGI = "18+",
-                            Picture = "someJPG",
-                            ReleaseDate = new DateTime(1994, 8, 21, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            MovieId = 2L,
-                            Country = "USA",
-                            Description = "someDescription",
-                            PEGI = "16+",
-                            Picture = "SomeJPG",
-                            ReleaseDate = new DateTime(1980, 2, 13, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Core.Models.Rating", b =>

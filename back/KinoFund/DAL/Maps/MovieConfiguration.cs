@@ -36,6 +36,20 @@ namespace DAL.Maps
 
             builder.Property(p => p.CategoryId)
                    .HasColumnName("CategoryID");
+
+            builder.HasData(
+                new Movie
+                { 
+                    MovieId = 1L,
+                    Title = "Pulp Fiction",
+                    CategoryId = 1L
+                },
+                new Movie
+                { 
+                    MovieId = 2L,
+                    Title = "Friday the 13th",
+                    CategoryId = 2L
+                });
         }
     }
 }
