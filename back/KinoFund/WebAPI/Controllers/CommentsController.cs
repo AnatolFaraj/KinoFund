@@ -33,14 +33,14 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("edit/{id}")]
+        [HttpPut("edit")]
         public async Task<IActionResult> EditCommentAsync(long commentId, CommentCreateDTO commentModel)
         {
             await _commentsManager.EditCommentAsync(commentId, commentModel);
             return Ok(commentModel);
         }
 
-        [HttpDelete("delete/{Id}")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteMovieAsync(long commentId)
         {
             await _commentsManager.DeleteCommentAsync(commentId);
