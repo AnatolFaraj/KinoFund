@@ -16,7 +16,7 @@ namespace Core.Dtos.Users
 
     public static class UserInfoDtoExtensionMethods
     {
-        public static UserInfoDto ToDto(this User userModel)
+        public static UserInfoDto ToDto(this UserModel userModel)
         {
             return new UserInfoDto
             {

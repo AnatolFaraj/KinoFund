@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetail>
+    public class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetailModel>
     {
-        public void Configure(EntityTypeBuilder<MovieDetail> builder)
+        public void Configure(EntityTypeBuilder<MovieDetailModel> builder)
         {
 
             builder.HasKey(x => x.MovieId);
 
             builder.HasOne(x => x.Movie)
                    .WithOne(x => x.MovieDetail)
-                   .HasForeignKey<MovieDetail>(x => x.MovieId);
+                   .HasForeignKey<MovieDetailModel>(x => x.MovieId);
 
             builder.Property(x => x.MovieId)
                    .HasColumnName("MovieID");
 
             builder.HasData(
-                new MovieDetail
+                new MovieDetailModel
                 { 
                     MovieId = 1L,
                     Country = "USA",
@@ -33,7 +33,7 @@ namespace DAL.Maps
                     Picture = "someJPG",
                     Description = "someDescription"
                 },
-                new MovieDetail
+                new MovieDetailModel
                 { 
                     MovieId = 2L,
                     Country = "USA",

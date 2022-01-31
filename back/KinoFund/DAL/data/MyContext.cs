@@ -14,16 +14,16 @@ namespace DAL.data
 
         
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Collection> Collections { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<CollectionModel> Collections { get; set; }
+        public DbSet<CommentModel> Comments { get; set; }
 
-        public DbSet<Credential> Credentials { get; set; }
-        public DbSet<Movie> Movies { get; set; }
+        public DbSet<CredentialModel> Credentials { get; set; }
+        public DbSet<MovieModel> Movies { get; set; }
 
-        public DbSet<MovieDetail> MovieDetails { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<MovieDetailModel> MovieDetails { get; set; }
+        public DbSet<RatingModel> Ratings { get; set; }
+        public DbSet<UserModel> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

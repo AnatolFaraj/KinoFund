@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class CredentialConfiguration : IEntityTypeConfiguration<Credential>
+    public class CredentialConfiguration : IEntityTypeConfiguration<CredentialModel>
     {
-        public void Configure(EntityTypeBuilder<Credential> builder)
+        public void Configure(EntityTypeBuilder<CredentialModel> builder)
         {
             builder.HasKey(x => x.UserId);
 
             builder.HasOne(x => x.User)
                    .WithOne(x => x.Credential)
-                   .HasForeignKey<Credential>(x =>  x.UserId);
+                   .HasForeignKey<CredentialModel>(x =>  x.UserId);
 
 
 

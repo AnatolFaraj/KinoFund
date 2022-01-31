@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class RatingConfiguration : IEntityTypeConfiguration<Rating>
+    public class RatingConfiguration : IEntityTypeConfiguration<RatingModel>
     {
-        public void Configure(EntityTypeBuilder<Rating> builder)
+        public void Configure(EntityTypeBuilder<RatingModel> builder)
         {
             builder.HasKey(x => new { x.UserId, x.MovieId });
 

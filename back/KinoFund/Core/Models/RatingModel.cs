@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Rating
+    public class RatingModel
     {
         
         public long MovieId { get; set; }
         public long UserId { get; set; }
         public int Value { get; set; }
 
-        public  Movie Movie { get; set; }
-        public  User User { get; set; }
+        public  MovieModel Movie { get; set; }
+        public  UserModel User { get; set; }
 
 
     }

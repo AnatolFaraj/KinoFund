@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Dtos.Movies
 {
-    public class MovieSetScoreDTO
+    public class MovieIdDTO
     {
         public long MovieId { get; set; }
-        public int Score { get; set; }
     }
 }

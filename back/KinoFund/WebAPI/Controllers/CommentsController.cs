@@ -27,17 +27,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateCommentAsync(CommentCreateDTO commentModel)
+        public async Task<IActionResult> CreateCommentAsync(CreateCommentDTO commentDTO)
         {
-            await _commentsManager.CreateCommentAsync(commentModel);
+            await _commentsManager.CreateCommentAsync(commentDTO);
             return Ok();
         }
 
         [HttpPut("edit")]
-        public async Task<IActionResult> EditCommentAsync(long commentId, CommentCreateDTO commentModel)
+        public async Task<IActionResult> EditCommentAsync(long commentId, EditCommentDto commentDTO)
         {
-            await _commentsManager.EditCommentAsync(commentId, commentModel);
-            return Ok(commentModel);
+            await _commentsManager.EditCommentAsync(commentId, commentDTO);
+            return Ok(commentDTO);
         }
 
         [HttpDelete("delete")]

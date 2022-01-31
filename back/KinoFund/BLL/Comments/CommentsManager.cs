@@ -40,7 +40,7 @@ namespace BLL.Comments
             };
         }
 
-        public async Task<CommentCreateDTO> EditCommentAsync(long commentId, CommentCreateDTO commentModel)
+        public async Task<EditCommentDto> EditCommentAsync(long commentId, EditCommentDto commentDTO)
         {
             var existingComment = _dbContext.Comments
                 .Where(c => c.CommentId == commentId)
@@ -48,29 +48,28 @@ namespace BLL.Comments
 
             if(existingComment != null)
             {
-                existingComment.Text = commentModel.Text;
+                existingComment.Text = commentDTO.Text;
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            return commentModel;
+            return commentDTO;
         }
 
-        public async Task<CommentCreateDTO> CreateCommentAsync(CommentCreateDTO commentModel)
+        public async Task<CreateCommentDTO> CreateCommentAsync(CreateCommentDTO commentDTO)
         {
-            _dbContext.Comments.Add(new Core.Models.Comment()
+            _dbContext.Comments.Add(new Core.Models.CommentModel()
             { 
-                CommentId = commentModel.CommentId,
-                UserId = commentModel.UserId,
-                MovieId = commentModel.MovieId,
-                Date = commentModel.Date,
-                Text = commentModel.Text,
-                RefersToCommentId = commentModel.RefersTo
+                UserId = commentDTO.UserId,
+                MovieId = commentDTO.MovieId,
+                Date = commentDTO.Date,
+                Text = commentDTO.Text,
+                RefersToCommentId = commentDTO.RefersTo
                 
             });
 
             await _dbContext.SaveChangesAsync();
-            return commentModel;
+            return commentDTO;
         }
 
 

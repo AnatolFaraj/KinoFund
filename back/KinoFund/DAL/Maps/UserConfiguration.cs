@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<UserModel>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserModel> builder)
         {
             builder.HasKey(x => x.UserId);
 

@@ -9,7 +9,7 @@ namespace Core.Dtos.Movies
 {
     public class MovieInfoDTO
     {
-        public long MovieId { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public long Category { get; set; }
@@ -23,11 +23,11 @@ namespace Core.Dtos.Movies
 
     public static class MovieInfoDtoExtensionMethods
     {
-        public static MovieInfoDTO ToDto(this Movie movieModel)
+        public static MovieInfoDTO ToDto(this MovieModel movieModel)
         {
             return new MovieInfoDTO
             {
-                MovieId = movieModel.MovieId,
+                
                 Title = movieModel.Title,
                 Description = movieModel.MovieDetail.Description,
                 Category = movieModel.Category.CategoryId,

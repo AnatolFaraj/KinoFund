@@ -49,7 +49,7 @@ namespace BLL.Movies
             return movieModel.ToDto();
         }
 
-        public async Task<MovieInfoDTO> EditMovieAsync(long movieId, MovieInfoDTO movieModel)
+        public async Task<MovieInfoDTO> EditMovieAsync(long movieId, MovieInfoDTO movieDTO)
         {
             var existingMovie = _dbContext.Movies
                 .Where(m => m.MovieId == movieId)
@@ -60,45 +60,45 @@ namespace BLL.Movies
             if(existingMovie != null)
             {
                 
-                existingMovie.Title = movieModel.Title;
-                existingMovie.MovieDetail.Description = movieModel.Description;
-                existingMovie.Category.CategoryId = movieModel.Category;
-                existingMovie.MovieDetail.Picture = movieModel.Picture;
-                existingMovie.MovieDetail.ReleaseDate = movieModel.ReleaseDate;
-                existingMovie.MovieDetail.Country = movieModel.Country;
-                existingMovie.MovieDetail.PEGI = movieModel.PEGI;
+                existingMovie.Title = movieDTO.Title;
+                existingMovie.MovieDetail.Description = movieDTO.Description;
+                existingMovie.Category.CategoryId = movieDTO.Category;
+                existingMovie.MovieDetail.Picture = movieDTO.Picture;
+                existingMovie.MovieDetail.ReleaseDate = movieDTO.ReleaseDate;
+                existingMovie.MovieDetail.Country = movieDTO.Country;
+                existingMovie.MovieDetail.PEGI = movieDTO.PEGI;
 
                 await _dbContext.SaveChangesAsync();
             }
             
 
-            return movieModel;
+            return movieDTO;
             
         }
 
-        public async Task<MovieInfoDTO> CreateMovieAsync(MovieInfoDTO movieModel)
+        public async Task<MovieInfoDTO> CreateMovieAsync(MovieInfoDTO movieDTO)
         {
 
-            _dbContext.Movies.Add(new Core.Models.Movie()
+            _dbContext.Movies.Add(new Core.Models.MovieModel()
             { 
-                MovieId = movieModel.MovieId,
-                Title = movieModel.Title,
-                MovieDetail = new Core.Models.MovieDetail()
+               
+                Title = movieDTO.Title,
+                MovieDetail = new Core.Models.MovieDetailModel()
                 {
-                    Description = movieModel.Description,
-                    Picture = movieModel.Picture,
-                    ReleaseDate = movieModel.ReleaseDate,
-                    Country = movieModel.Country,
-                    PEGI = movieModel.PEGI
+                    Description = movieDTO.Description,
+                    Picture = movieDTO.Picture,
+                    ReleaseDate = movieDTO.ReleaseDate,
+                    Country = movieDTO.Country,
+                    PEGI = movieDTO.PEGI
                     
                 },
-                CategoryId = movieModel.Category
+                CategoryId = movieDTO.Category
                 
 
             });
 
             await _dbContext.SaveChangesAsync();
-            return movieModel;
+            return movieDTO;
         }
 
 

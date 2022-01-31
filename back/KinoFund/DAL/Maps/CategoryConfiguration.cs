@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public class CategoryConfiguration : IEntityTypeConfiguration<CategoryModel>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+        public void Configure(EntityTypeBuilder<CategoryModel> builder)
         {
             builder.HasKey(x => x.CategoryId);
 
@@ -22,12 +22,12 @@ namespace DAL.Maps
                    .HasColumnName("CategoryID");
 
             builder.HasData(
-                new Category 
+                new CategoryModel
                 { 
                     CategoryId = 1,
                     Name = "Comedy"
                 },
-                new Category
+                new CategoryModel
                 {   CategoryId = 2,
                     Name = "Horror"
                 });

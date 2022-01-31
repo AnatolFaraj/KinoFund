@@ -1,3 +1,4 @@
+using BLL.Collections;
 using BLL.Comments;
 using BLL.Movies;
 using BLL.Users;
@@ -42,6 +43,7 @@ namespace WebAPI
             services.AddTransient<UsersManager>();
             services.AddTransient<MoviesManager>();
             services.AddTransient<CommentsManager>();
+            services.AddTransient<CollectionsManager>();
 
         }
 
