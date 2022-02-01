@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/movies/{movieId}/comments")]
+    [Route("api/comments")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
@@ -20,30 +20,30 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<GetAllComentsDTO> GetAllCommentsAsync(long movieId)
+        public async Task<GetAllComentsDTO> GetAllAsync(long movieId)
         {
-            var comments = await _commentsManager.GetAllCommentsAsync(movieId);
+            var comments = await _commentsManager.GetAllAsync(movieId);
             return comments;
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateCommentAsync(CreateCommentDTO commentDTO)
+        public async Task<IActionResult> CreateAsync(CreateCommentDTO commentDTO)
         {
-            await _commentsManager.CreateCommentAsync(commentDTO);
+            await _commentsManager.CreateAsync(commentDTO);
             return Ok();
         }
 
         [HttpPut("edit")]
-        public async Task<IActionResult> EditCommentAsync(long commentId, EditCommentDto commentDTO)
+        public async Task<IActionResult> EditAsync(EditCommentDto commentDTO)
         {
-            await _commentsManager.EditCommentAsync(commentId, commentDTO);
+            await _commentsManager.EditAsync(commentDTO);
             return Ok(commentDTO);
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteMovieAsync(long commentId)
+        public async Task<IActionResult> DeleteAsync(long commentId)
         {
-            await _commentsManager.DeleteCommentAsync(commentId);
+            await _commentsManager.DeleteAsync(commentId);
             return Ok();
         }
     }

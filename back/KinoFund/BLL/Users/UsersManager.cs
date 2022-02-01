@@ -18,7 +18,7 @@ namespace BLL.Users
             _dbContext = context;
         }
 
-        public async Task<GetAllUsersDto> GetAllUsersAsync()
+        public async Task<GetAllUsersDto> GetAllAsync()
         {
             var users = await _dbContext.Users
                 .Include(i => i.Credential)
@@ -37,7 +37,7 @@ namespace BLL.Users
             };
         }
 
-        public async Task<UserInfoDto> GetUserInfoAsync(long userId)
+        public async Task<UserInfoDto> GetInfoAsync(long userId)
         {
             var userModel = await _dbContext.Users
                 .Include(i => i.Credential)

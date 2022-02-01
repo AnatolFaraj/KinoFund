@@ -10,9 +10,10 @@ namespace Core.Dtos.Collections
 {
     public class EditCollectionDTO
     {
+        public long CollectionId { get; set; }
         public string Name { get; set; }
         public CollectionType Type { get; set; }
 
-        public List<MovieIdDTO> Movies { get; set; }
+        public List<CollectionMovieDTO> Movies { get; set; }
     }
 }

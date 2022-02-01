@@ -9,10 +9,10 @@ namespace Core.Dtos.Movies
 {
     public class MovieInfoDTO
     {
-
+        public long MovieId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public long Category { get; set; }
+        public long CategoryId { get; set; }
         public string Picture { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public string Country { get; set; }
@@ -30,7 +30,7 @@ namespace Core.Dtos.Movies
                 
                 Title = movieModel.Title,
                 Description = movieModel.MovieDetail.Description,
-                Category = movieModel.Category.CategoryId,
+                CategoryId = movieModel.Category.CategoryId,
                 Picture = movieModel.MovieDetail.Picture,
                 ReleaseDate = movieModel.MovieDetail.ReleaseDate,
                 Country = movieModel.MovieDetail.Country,

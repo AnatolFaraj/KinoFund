@@ -10,10 +10,13 @@ namespace Core.Dtos.Comments
     {
         public long CommentId { get; set; }
         public string UserName { get; set; }
-        public string MovieTitle { get; set; }
+        public long UserId { get; set; }
+        public DateTime Date { get; set; }
         public string Text { get; set; }
 
-        public long? RefersTo { get; set; }
+        public long? ParentCommentId { get; set; }
+
+        public List<CommentDTO> SubComments { get; set; }
 
 
     }

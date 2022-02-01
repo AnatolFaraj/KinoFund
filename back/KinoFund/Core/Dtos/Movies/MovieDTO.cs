@@ -10,9 +10,8 @@ namespace Core.Dtos.Movies
     {
         public long MovieId { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
 
-        public long Category { get; set; }
+        public string CategoryName { get; set; }
 
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Dtos.Movies
+namespace Core.Dtos.Collections
 {
-    public class MovieIdDTO
+    public class CollectionMovieDTO
     {
         public long MovieId { get; set; }
     }

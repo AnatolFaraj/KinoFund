@@ -19,7 +19,7 @@ namespace BLL.Movies
             _dbContext = context;
         }
 
-        public async Task<GetAllMoviesDTO> GetAllMoviesAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync()
         {
             var movies = await _dbContext.Movies
                 .Include(i => i.MovieDetail)
@@ -28,8 +28,7 @@ namespace BLL.Movies
                 {
                     MovieId = m.MovieId,
                     Title = m.Title,
-                    Description = m.MovieDetail.Description,
-                    Category = m.Category.CategoryId
+                    CategoryName = m.Category.Name
 
                 }).OrderBy(t => t.Title).ToListAsync();
             
@@ -39,7 +38,7 @@ namespace BLL.Movies
             };
         }
 
-        public async Task<MovieInfoDTO> GetMovieInfoAsync(long movieId)
+        public async Task<MovieInfoDTO> GetInfoAsync(long movieId)
         {
             var movieModel = await _dbContext.Movies
                 .Include(i => i.Category)
@@ -49,34 +48,34 @@ namespace BLL.Movies
             return movieModel.ToDto();
         }
 
-        public async Task<MovieInfoDTO> EditMovieAsync(long movieId, MovieInfoDTO movieDTO)
+        public async Task<bool> EditAsync(MovieInfoDTO movieDTO)
         {
-            var existingMovie = _dbContext.Movies
-                .Where(m => m.MovieId == movieId)
+            var movieModel = await _dbContext.Movies
+                .Where(m => m.MovieId == movieDTO.MovieId)
                 .Include(i => i.MovieDetail)
                 .Include(i => i.Category)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-            if(existingMovie != null)
+            if(movieModel != null)
             {
-                
-                existingMovie.Title = movieDTO.Title;
-                existingMovie.MovieDetail.Description = movieDTO.Description;
-                existingMovie.Category.CategoryId = movieDTO.Category;
-                existingMovie.MovieDetail.Picture = movieDTO.Picture;
-                existingMovie.MovieDetail.ReleaseDate = movieDTO.ReleaseDate;
-                existingMovie.MovieDetail.Country = movieDTO.Country;
-                existingMovie.MovieDetail.PEGI = movieDTO.PEGI;
+
+                movieModel.Title = movieDTO.Title;
+                movieModel.MovieDetail.Description = movieDTO.Description;
+                movieModel.Category.CategoryId = movieDTO.CategoryId;
+                movieModel.MovieDetail.Picture = movieDTO.Picture;
+                movieModel.MovieDetail.ReleaseDate = movieDTO.ReleaseDate;
+                movieModel.MovieDetail.Country = movieDTO.Country;
+                movieModel.MovieDetail.PEGI = movieDTO.PEGI;
 
                 await _dbContext.SaveChangesAsync();
             }
             
 
-            return movieDTO;
+            return true;
             
         }
 
-        public async Task<MovieInfoDTO> CreateMovieAsync(MovieInfoDTO movieDTO)
+        public async Task<long> CreateAsync(MovieInfoDTO movieDTO)
         {
 
             _dbContext.Movies.Add(new Core.Models.MovieModel()
@@ -92,39 +91,30 @@ namespace BLL.Movies
                     PEGI = movieDTO.PEGI
                     
                 },
-                CategoryId = movieDTO.Category
-                
+                CategoryId = movieDTO.CategoryId
 
             });
 
             await _dbContext.SaveChangesAsync();
-            return movieDTO;
+            return movieDTO.MovieId;
         }
 
 
-        public async Task DeleteMovieAsync(long movieId)
+        public async Task<bool> DeleteAsync(long movieId)
         {
-            var movie = _dbContext.Movies
+            var movie = await _dbContext.Movies
                 .Where(m => m.MovieId == movieId)
                 .Include(i => i.MovieDetail)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             _dbContext.Movies.Remove(movie);
             await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
         
 
-        public async Task<MovieDTO> GetMovieAsync(long movieId)
-        {
-            var movie = await _dbContext.Movies.FindAsync(movieId);
-            
-            return new MovieDTO
-            { 
-                MovieId = movie.MovieId,
-                Title = movie.Title,
-                Description = movie.MovieDetail.Description
-            };
-        }
+        
     }
 }

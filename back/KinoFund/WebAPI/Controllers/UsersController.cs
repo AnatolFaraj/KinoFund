@@ -21,16 +21,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<GetAllUsersDto> GetAllUsersAsync()
+        public async Task<GetAllUsersDto> GetAllAsync()
         {
-            var users = await _usersManager.GetAllUsersAsync();
+            var users = await _usersManager.GetAllAsync();
             return users;
         }
 
         [HttpGet("{userId}/info")]
-        public async Task<UserInfoDto> GetUserInfoAsync(long userId)
+        public async Task<UserInfoDto> GetInfoAsync(long userId)
         {
-            var user = await _usersManager.GetUserInfoAsync(userId);
+            var user = await _usersManager.GetInfoAsync(userId);
             return user;
         }
     }

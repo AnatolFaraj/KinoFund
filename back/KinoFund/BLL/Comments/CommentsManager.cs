@@ -18,7 +18,7 @@ namespace BLL.Comments
             _dbContext = context;
         }
 
-        public async Task<GetAllComentsDTO> GetAllCommentsAsync(long movieId)
+        public async Task<GetAllComentsDTO> GetAllAsync(long movieId)
         {
             var comments = await _dbContext.Comments
                 .Include(i => i.User)
@@ -28,9 +28,8 @@ namespace BLL.Comments
                 {
                     CommentId = c.CommentId,
                     UserName = c.User.UserName,
-                    MovieTitle = c.Movie.Title,
                     Text = c.Text,
-                    RefersTo = c.RefersToCommentId
+                    ParentCommentId = c.RefersToCommentId
 
                 }).ToListAsync();
 
@@ -40,48 +39,48 @@ namespace BLL.Comments
             };
         }
 
-        public async Task<EditCommentDto> EditCommentAsync(long commentId, EditCommentDto commentDTO)
+        public async Task<bool> EditAsync(EditCommentDto commentDTO)
         {
-            var existingComment = _dbContext.Comments
-                .Where(c => c.CommentId == commentId)
-                .FirstOrDefault();
+            var commentModel = await _dbContext.Comments
+                .Where(c => c.CommentId == commentDTO.CommentId)
+                .FirstOrDefaultAsync();
 
-            if(existingComment != null)
+            if(commentModel != null)
             {
-                existingComment.Text = commentDTO.Text;
+                commentModel.Text = commentDTO.Text;
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            return commentDTO;
+            return true;
         }
 
-        public async Task<CreateCommentDTO> CreateCommentAsync(CreateCommentDTO commentDTO)
+        public async Task<long> CreateAsync(CreateCommentDTO commentDTO)
         {
             _dbContext.Comments.Add(new Core.Models.CommentModel()
             { 
                 UserId = commentDTO.UserId,
                 MovieId = commentDTO.MovieId,
-                Date = commentDTO.Date,
                 Text = commentDTO.Text,
                 RefersToCommentId = commentDTO.RefersTo
                 
             });
 
             await _dbContext.SaveChangesAsync();
-            return commentDTO;
+            return commentDTO.UserId;
         }
 
 
 
-        public async Task DeleteCommentAsync(long commentId)
+        public async Task<bool> DeleteAsync(long commentId)
         {
-            var comment = _dbContext.Comments
+            var comment = await _dbContext.Comments
                 .Where(c => c.CommentId == commentId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             _dbContext.Comments.Remove(comment);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

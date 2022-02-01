@@ -21,37 +21,37 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<GetAllCollectionsDTO> GetAllCollectionsAsync()
+        public async Task<GetAllCollectionsDTO> GetAllAsync()
         {
-            var collections = await _collectionsManager.GetAllCollectionsAsync();
+            var collections = await _collectionsManager.GetAllAsync();
             return collections;
         }
 
-        [HttpGet("{collectionId}")]
-        public async Task<CollectionInfoDTO> GetCollectionAsync(long collectionId)
+        [HttpGet("{collectionId}/info")]
+        public async Task<CollectionInfoDTO> GetInfoAsync(long collectionId)
         {
-            var collection = await _collectionsManager.GetCollectionAsync(collectionId);
+            var collection = await _collectionsManager.GetInfoAsync(collectionId);
             return collection;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateCollectionAsync(CreateCollectionDTO collection)
+        [HttpPost("")]
+        public async Task<IActionResult> CreateAsync(CreateCollectionDTO collection)
         {
-            await _collectionsManager.CreateCollectionAsync(collection);
+            await _collectionsManager.CreateAsync(collection);
             return Ok();
         }
 
-        [HttpPut("edit/{collectionId}")]
-        public async Task<IActionResult> EditCollectionAsync(EditCollectionDTO collection, long collectionId)
+        [HttpPut("{collectionId}")]
+        public async Task<IActionResult> EditAsync(EditCollectionDTO collection)
         {
-            await _collectionsManager.EditCollectionAsync(collection, collectionId);
+            await _collectionsManager.EditAsync(collection);
             return Ok(collection);
         }
 
-        [HttpDelete("delete/{collectionId}")]
-        public async Task<IActionResult> DeleteCollectionAsync(long colllectionId)
+        [HttpDelete("{collectionId}")]
+        public async Task<IActionResult> DeleteAsync(long colllectionId)
         {
-            await _collectionsManager.DeleteCollectionAsync(colllectionId);
+             await _collectionsManager.DeleteAsync(colllectionId);
             return Ok();
         }
     }

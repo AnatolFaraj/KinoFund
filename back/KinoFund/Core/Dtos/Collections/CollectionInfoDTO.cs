@@ -15,26 +15,19 @@ namespace Core.Dtos.Collections
         public string Author { get; set; }
         public CollectionType Type { get; set; }
 
-        public List<MovieDTO> Movies { get; set; }
+        public List<CollectionMovieDTO> Movies { get; set; }
     }
 
     public static class CollectionInfoDtoExtensionMethods
     {
-        public static CollectionInfoDTO ToDto(this CollectionModel collectionModel)
+        public static CollectionInfoDTO ToDto(this CollectionModel collectionModel, CollectionInfoDTO movies)
         {
             return new CollectionInfoDTO
             {
                 Name = collectionModel.Name,
                 Author = collectionModel.User.UserName,
                 Type = collectionModel.Type,
-                Movies = collectionModel.Movies.Select(x => new MovieDTO
-                {
-                    MovieId = x.MovieId,
-                    Title = x.Title,
-                    Category = x.CategoryId,
-                    Description = x.MovieDetail.Description
-
-                }).ToList()
+                Movies = movies.Movies
             };
 
 

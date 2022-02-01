@@ -8,6 +8,7 @@ namespace Core.Dtos.Comments
 {
     public class EditCommentDto
     {
+        public long CommentId { get; set; }
         public string Text { get; set; }
     }
 }

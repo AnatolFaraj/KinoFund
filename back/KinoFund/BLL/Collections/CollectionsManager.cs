@@ -19,7 +19,7 @@ namespace BLL.Collections
             _dbContext = context;
         }
 
-        public async Task<GetAllCollectionsDTO> GetAllCollectionsAsync()
+        public async Task<GetAllCollectionsDTO> GetAllAsync()
         {
             var collections = await _dbContext.Collections
                 .Include(i => i.Movies)
@@ -40,7 +40,7 @@ namespace BLL.Collections
             };
         }
 
-        public async Task<CollectionInfoDTO> GetCollectionAsync(long collectionId)
+        public async Task<CollectionInfoDTO> GetInfoAsync(long collectionId)
         {
             var collection = await _dbContext.Collections
                 .Include(i => i.Movies)
@@ -49,10 +49,12 @@ namespace BLL.Collections
                 
                 .FirstAsync(c => c.CollectionId == collectionId);
 
-            return collection.ToDto();
+            var movies = new CollectionInfoDTO();
+
+            return collection.ToDto(movies);
         }
 
-        public async Task<CreateCollectionDTO> CreateCollectionAsync(CreateCollectionDTO collectionDTO)
+        public async Task<long> CreateAsync(CreateCollectionDTO collectionDTO)
         {
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
@@ -67,48 +69,45 @@ namespace BLL.Collections
 
             });
 
-
-            
-
-
             await _dbContext.SaveChangesAsync();
-            return collectionDTO;
+            return collectionDTO.CollectionId;
         }
 
 
-        public async Task<EditCollectionDTO> EditCollectionAsync(EditCollectionDTO collectionDTO, long collectionId)
+        public async Task<bool> EditAsync(EditCollectionDTO collectionDTO)
         {
-            var existingCollection = _dbContext.Collections
-                .Where(c => c.CollectionId == collectionId)
+            var collectionModel = await _dbContext.Collections
+                .Where(c => c.CollectionId == collectionDTO.CollectionId)
                 .Include(i => i.Movies)
                 .ThenInclude(i => i.MovieDetail)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
 
-            if (existingCollection != null)
+            if (collectionModel != null)
             {
-                existingCollection.Name = collectionDTO.Name;
-                existingCollection.Type = collectionDTO.Type;
-                existingCollection.Movies = movieModels;
+                collectionModel.Name = collectionDTO.Name;
+                collectionModel.Type = collectionDTO.Type;
+                collectionModel.Movies = movieModels;
                 
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            return collectionDTO;
+            return true;
 
         }
 
-        public async Task DeleteCollectionAsync(long collectionId)
+        public async Task<bool> DeleteAsync(long collectionId)
         {
-            var collection = _dbContext.Collections
+            var collection = await _dbContext.Collections
                 .Where(c => c.CollectionId == collectionId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             _dbContext.Collections.Remove(collection);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

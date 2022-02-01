@@ -11,7 +11,6 @@ namespace Core.Dtos.Comments
         public long UserId { get; set; }
         public long MovieId { get; set; }
         public long? RefersTo { get; set; }
-        public DateTime Date { get; set; }
         public string Text { get; set; }
     }
 }

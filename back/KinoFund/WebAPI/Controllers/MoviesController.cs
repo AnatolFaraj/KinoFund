@@ -22,38 +22,38 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("")]
-        public async Task<GetAllMoviesDTO> GetAllMoviesAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync()
         {
-            var users = await _moviesManager.GetAllMoviesAsync();
+            var users = await _moviesManager.GetAllAsync();
             return users;
         }
 
 
         [HttpGet("{movieId}/info")]
-        public async Task<MovieInfoDTO> GetMovieInfoAsync(long movieId)
+        public async Task<MovieInfoDTO> GetInfoAsync(long movieId)
         {
-            var movie = await _moviesManager.GetMovieInfoAsync(movieId);
+            var movie = await _moviesManager.GetInfoAsync(movieId);
             return movie;
         }
 
         [HttpPut("{movieId}")]
-        public async Task<IActionResult> EditMovieAsync(long movieId, MovieInfoDTO movieModel)
+        public async Task<IActionResult> EditAsync(MovieInfoDTO movieModel)
         {
-            await _moviesManager.EditMovieAsync(movieId, movieModel);
+            await _moviesManager.EditAsync(movieModel);
             return Ok(movieModel);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateMovieAsync(MovieInfoDTO movieModel)
+        public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
-             await _moviesManager.CreateMovieAsync(movieModel);
+             await _moviesManager.CreateAsync(movieModel);
             return Ok();
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteMovieAsync(long movieId)
+        public async Task<IActionResult> DeleteAsync(long movieId)
         {
-            await _moviesManager.DeleteMovieAsync(movieId);
+            await _moviesManager.DeleteAsync(movieId);
             return Ok();
         }
 
