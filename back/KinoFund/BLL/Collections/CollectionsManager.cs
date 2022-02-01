@@ -49,7 +49,10 @@ namespace BLL.Collections
                 
                 .FirstAsync(c => c.CollectionId == collectionId);
 
-            var movies = new CollectionInfoDTO();
+            var movies = collection.Movies.Select(x => new CollectionMovieDTO
+            { 
+                MovieId = x.MovieId
+            }).ToList();
 
             return collection.ToDto(movies);
         }

@@ -20,14 +20,14 @@ namespace Core.Dtos.Collections
 
     public static class CollectionInfoDtoExtensionMethods
     {
-        public static CollectionInfoDTO ToDto(this CollectionModel collectionModel, CollectionInfoDTO movies)
+        public static CollectionInfoDTO ToDto(this CollectionModel collectionModel, List<CollectionMovieDTO> movies)
         {
             return new CollectionInfoDTO
             {
                 Name = collectionModel.Name,
                 Author = collectionModel.User.UserName,
                 Type = collectionModel.Type,
-                Movies = movies.Movies
+                Movies = movies
             };
 
 
