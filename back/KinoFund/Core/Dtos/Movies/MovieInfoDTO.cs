@@ -27,7 +27,7 @@ namespace Core.Dtos.Movies
         {
             return new MovieInfoDTO
             {
-                
+                MovieId = movieModel.MovieId,
                 Title = movieModel.Title,
                 Description = movieModel.MovieDetail.Description,
                 CategoryId = movieModel.Category.CategoryId,

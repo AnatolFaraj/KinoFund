@@ -61,7 +61,7 @@ namespace BLL.Movies
 
                 movieModel.Title = movieDTO.Title;
                 movieModel.MovieDetail.Description = movieDTO.Description;
-                movieModel.Category.CategoryId = movieDTO.CategoryId;
+                movieModel.CategoryId = movieDTO.CategoryId;
                 movieModel.MovieDetail.Picture = movieDTO.Picture;
                 movieModel.MovieDetail.ReleaseDate = movieDTO.ReleaseDate;
                 movieModel.MovieDetail.Country = movieDTO.Country;
@@ -96,7 +96,9 @@ namespace BLL.Movies
             });
 
             await _dbContext.SaveChangesAsync();
-            return movieDTO.MovieId;
+
+            var newId = _dbContext.Movies.Select(x => x.MovieId).Max();
+            return newId;
         }
 
 

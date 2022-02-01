@@ -70,7 +70,10 @@ namespace BLL.Collections
             });
 
             await _dbContext.SaveChangesAsync();
-            return collectionDTO.CollectionId;
+
+            var newId = _dbContext.Collections.Select(x => x.CollectionId).Max();
+
+            return newId;
         }
 
 
@@ -78,8 +81,6 @@ namespace BLL.Collections
         {
             var collectionModel = await _dbContext.Collections
                 .Where(c => c.CollectionId == collectionDTO.CollectionId)
-                .Include(i => i.Movies)
-                .ThenInclude(i => i.MovieDetail)
                 .FirstOrDefaultAsync();
 
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();

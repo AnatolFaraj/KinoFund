@@ -20,6 +20,7 @@ namespace BLL.Comments
 
         public async Task<GetAllComentsDTO> GetAllAsync(long movieId)
         {
+
             var comments = await _dbContext.Comments
                 .Include(i => i.User)
                 .Include(i => i.Movie)
@@ -29,9 +30,17 @@ namespace BLL.Comments
                     CommentId = c.CommentId,
                     UserName = c.User.UserName,
                     Text = c.Text,
-                    ParentCommentId = c.RefersToCommentId
+                    ParentCommentId = c.RefersToCommentId,
+                    SubComments = c.Movie.Comments.Where(x => x.RefersToCommentId == c.CommentId).Select(x => new SubCommentIdDTO
+                    { 
+                        SubCommentId = x.CommentId
+
+                        
+                    }).ToList()
 
                 }).ToListAsync();
+
+            
 
             return new GetAllComentsDTO
             {
@@ -67,7 +76,9 @@ namespace BLL.Comments
             });
 
             await _dbContext.SaveChangesAsync();
-            return commentDTO.UserId;
+
+            var newId = _dbContext.Comments.Select(x => x.CommentId).Max();
+            return newId;
         }
 
 

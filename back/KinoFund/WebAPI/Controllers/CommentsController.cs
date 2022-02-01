@@ -29,8 +29,8 @@ namespace WebAPI.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateAsync(CreateCommentDTO commentDTO)
         {
-            await _commentsManager.CreateAsync(commentDTO);
-            return Ok();
+            var newCommentId = await _commentsManager.CreateAsync(commentDTO);
+            return Ok(newCommentId);
         }
 
         [HttpPut("edit")]

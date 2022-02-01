@@ -37,8 +37,8 @@ namespace WebAPI.Controllers
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(CreateCollectionDTO collection)
         {
-            await _collectionsManager.CreateAsync(collection);
-            return Ok();
+            var newCollectionId = await _collectionsManager.CreateAsync(collection);
+            return Ok(newCollectionId);
         }
 
         [HttpPut("{collectionId}")]
