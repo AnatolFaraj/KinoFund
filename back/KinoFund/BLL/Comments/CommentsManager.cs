@@ -17,9 +17,43 @@ namespace BLL.Comments
         {
             _dbContext = context;
         }
+        public static List<SubCommentIdDTO> GetCommentsHierarchy(ICollection<Core.Models.CommentModel> allComments, long parentCommentId)
+        {
+            var hierarchy = new List<SubCommentIdDTO>();
+            
+            var subComments = allComments.Where(x => x.RefersToCommentId == parentCommentId);
+            
 
+            foreach(var sub in subComments)
+            {
+                
+                hierarchy.Add(new SubCommentIdDTO() { SubCommentId = sub.CommentId, SubComments = GetCommentsHierarchy(allComments, sub.CommentId) });
+            }
+
+            return hierarchy;
+
+        }
+
+        public static int TotalSubCommentsCount(List<SubCommentIdDTO> comments)
+        {
+            int returnCount = comments.Count;
+
+            foreach(var comment in comments)
+            {
+                returnCount += TotalSubCommentsCount(comment.SubComments);
+            }
+
+            return returnCount;
+        }
+        
         public async Task<GetAllComentsDTO> GetAllAsync(long movieId)
         {
+            var allCommentsByMovie =  _dbContext.Comments
+                .Include(i => i.User)
+                .Include(i => i.Movie)
+                .Where(x => x.MovieId == movieId).ToList();
+
+            
 
             var comments = await _dbContext.Comments
                 .Include(i => i.User)
@@ -31,22 +65,48 @@ namespace BLL.Comments
                     UserName = c.User.UserName,
                     Text = c.Text,
                     ParentCommentId = c.RefersToCommentId,
-                    SubComments = c.Movie.Comments.Where(x => x.RefersToCommentId == c.CommentId).Select(x => new SubCommentIdDTO
-                    { 
-                        SubCommentId = x.CommentId
+                    NumberOfComments = TotalSubCommentsCount(GetCommentsHierarchy(allCommentsByMovie, c.CommentId)),
+                    SubComments = GetCommentsHierarchy(allCommentsByMovie, c.CommentId),
 
-                        
-                    }).ToList()
 
                 }).ToListAsync();
 
-            
 
             return new GetAllComentsDTO
             {
                 Comments = comments,
             };
         }
+
+        public async Task<CommentDTO> GetAllSubsByIdAsync(long commentId)
+        {
+
+            var allSubCommentsByComment = _dbContext.Comments
+                .Where(x => x.CommentId == commentId)
+                .SelectMany(x => x.Movie.Comments)
+                .ToList();
+
+
+
+            var comment = await _dbContext.Comments
+                .Include(i => i.User)
+                .Include(i => i.Movie)
+                .Where(x => x.CommentId == commentId)
+                .Select(c => new CommentDTO
+                {
+                    CommentId = c.CommentId,
+                    UserName = c.User.UserName,
+                    Text = c.Text,
+                    ParentCommentId = c.RefersToCommentId,
+                    NumberOfComments = TotalSubCommentsCount(GetCommentsHierarchy(allSubCommentsByComment, c.CommentId)),
+                    SubComments = GetCommentsHierarchy(allSubCommentsByComment, c.CommentId),
+
+
+                }).FirstOrDefaultAsync();
+
+            return comment;
+        }
+        
 
         public async Task<bool> EditAsync(EditCommentDto commentDTO)
         {
@@ -66,19 +126,18 @@ namespace BLL.Comments
 
         public async Task<long> CreateAsync(CreateCommentDTO commentDTO)
         {
-            _dbContext.Comments.Add(new Core.Models.CommentModel()
-            { 
+            var commentModel = new Core.Models.CommentModel()
+            {
                 UserId = commentDTO.UserId,
                 MovieId = commentDTO.MovieId,
                 Text = commentDTO.Text,
                 RefersToCommentId = commentDTO.RefersTo
-                
-            });
+            };
+            _dbContext.Comments.Add(commentModel);
 
             await _dbContext.SaveChangesAsync();
 
-            var newId = _dbContext.Comments.Select(x => x.CommentId).Max();
-            return newId;
+            return commentModel.CommentId;
         }
 
 

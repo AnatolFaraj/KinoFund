@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Core.Dtos.Comments;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,8 +18,12 @@ namespace Core.Dtos.Comments
 
         public long? ParentCommentId { get; set; }
 
+        public int NumberOfComments { get; set; }
         public List<SubCommentIdDTO> SubComments { get; set; }
+
 
 
     }
 }
+
+

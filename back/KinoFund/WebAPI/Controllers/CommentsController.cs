@@ -25,7 +25,12 @@ namespace WebAPI.Controllers
             var comments = await _commentsManager.GetAllAsync(movieId);
             return comments;
         }
-
+        [HttpGet("{commentId}")]
+        public async Task<CommentDTO> GetAllSubsByIdAsync(long commentId)
+        {
+            var subComments = await _commentsManager.GetAllSubsByIdAsync(commentId);
+                return subComments;
+        }
         [HttpPost("create")]
         public async Task<IActionResult> CreateAsync(CreateCommentDTO commentDTO)
         {

@@ -77,10 +77,8 @@ namespace BLL.Movies
 
         public async Task<long> CreateAsync(MovieInfoDTO movieDTO)
         {
-
-            _dbContext.Movies.Add(new Core.Models.MovieModel()
-            { 
-               
+            var movieModel = new Core.Models.MovieModel()
+            {
                 Title = movieDTO.Title,
                 MovieDetail = new Core.Models.MovieDetailModel()
                 {
@@ -89,16 +87,16 @@ namespace BLL.Movies
                     ReleaseDate = movieDTO.ReleaseDate,
                     Country = movieDTO.Country,
                     PEGI = movieDTO.PEGI
-                    
                 },
                 CategoryId = movieDTO.CategoryId
+                
+            };
 
-            });
+            _dbContext.Movies.Add(movieModel);
 
             await _dbContext.SaveChangesAsync();
 
-            var newId = _dbContext.Movies.Select(x => x.MovieId).Max();
-            return newId;
+            return movieModel.MovieId;
         }
 
 

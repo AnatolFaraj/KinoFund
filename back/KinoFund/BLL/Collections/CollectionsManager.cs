@@ -62,21 +62,19 @@ namespace BLL.Collections
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
 
-            _dbContext.Collections.Add(new Core.Models.CollectionModel()
-            {
 
+            var collectionModel = new Core.Models.CollectionModel()
+            {
                 Name = collectionDTO.Name,
                 Type = collectionDTO.Type,
                 UserId = collectionDTO.UserId,
                 Movies = movieModels
-
-            });
+            };
+            _dbContext.Collections.Add(collectionModel);
 
             await _dbContext.SaveChangesAsync();
 
-            var newId = _dbContext.Collections.Select(x => x.CollectionId).Max();
-
-            return newId;
+            return collectionModel.CollectionId;
         }
 
 
