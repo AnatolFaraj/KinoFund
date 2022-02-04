@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
+    public class CollectionConfiguration : IEntityTypeConfiguration<CollectionModel>
     {
-        public void Configure(EntityTypeBuilder<Collection> builder)
+        public void Configure(EntityTypeBuilder<CollectionModel> builder)
         {
             builder.HasKey(x => x.CollectionId);
 

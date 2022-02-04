@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Credential
+    public class CredentialModel
     {
 
         public long UserId { get; set; }
-        public User User { get; set; }
+        public UserModel User { get; set; }
         public long? ResetPasswordKey { get; set; }
 
         public string Password { get; set; }

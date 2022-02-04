@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Category
+    public class CategoryModel
     {
         public long CategoryId { get; set; }
         public string Name { get; set; }
         
 
-        public ICollection<Movie> Movies { get; set; }
+        public ICollection<MovieModel> Movies { get; set; }
     }
 }

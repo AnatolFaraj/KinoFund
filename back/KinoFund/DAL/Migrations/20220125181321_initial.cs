@@ -123,7 +123,7 @@ namespace DAL.Migrations
                         column: x => x.MovieID,
                         principalTable: "Movies",
                         principalColumn: "MovieID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserID",
                         column: x => x.UserID,
@@ -180,7 +180,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollectionMovie",
+                name: "CollectionModelMovieModel",
                 columns: table => new
                 {
                     CollectionsCollectionId = table.Column<long>(type: "bigint", nullable: false),
@@ -188,15 +188,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollectionMovie", x => new { x.CollectionsCollectionId, x.MoviesMovieId });
+                    table.PrimaryKey("PK_CollectionModelMovieModel", x => new { x.CollectionsCollectionId, x.MoviesMovieId });
                     table.ForeignKey(
-                        name: "FK_CollectionMovie_Collections_CollectionsCollectionId",
+                        name: "FK_CollectionModelMovieModel_Collections_CollectionsCollectionId",
                         column: x => x.CollectionsCollectionId,
                         principalTable: "Collections",
                         principalColumn: "CollectionID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CollectionMovie_Movies_MoviesMovieId",
+                        name: "FK_CollectionModelMovieModel_Movies_MoviesMovieId",
                         column: x => x.MoviesMovieId,
                         principalTable: "Movies",
                         principalColumn: "MovieID",
@@ -204,8 +204,8 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CollectionMovie_MoviesMovieId",
-                table: "CollectionMovie",
+                name: "IX_CollectionModelMovieModel_MoviesMovieId",
+                table: "CollectionModelMovieModel",
                 column: "MoviesMovieId");
 
             migrationBuilder.CreateIndex(
@@ -244,7 +244,7 @@ namespace DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CollectionMovie");
+                name: "CollectionModelMovieModel");
 
             migrationBuilder.DropTable(
                 name: "Comments");

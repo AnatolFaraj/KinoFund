@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Core.Models
 {
     
-    public class User
+    public class UserModel
     {
         public long UserId { get; set; }
         public string UserName { get; set; } 
@@ -15,11 +15,11 @@ namespace Core.Models
         public DateTime? DateOfBirth { get; set; }
         public UserType Type { get; set; }
 
-        public  ICollection<Comment> Comments { get; set; }
-        public  ICollection<Collection> Collections { get; set; }
+        public  ICollection<CommentModel> Comments { get; set; }
+        public  ICollection<CollectionModel> Collections { get; set; }
 
-        public  ICollection<Rating> Ratings { get; set; }
-        public Credential Credential { get; set; }
+        public  ICollection<RatingModel> Ratings { get; set; }
+        public CredentialModel Credential { get; set; }
 
     }
 }

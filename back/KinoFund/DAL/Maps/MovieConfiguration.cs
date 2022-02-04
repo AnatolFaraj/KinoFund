@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class MovieConfiguration : IEntityTypeConfiguration<Movie>
+    public class MovieConfiguration : IEntityTypeConfiguration<MovieModel>
     {
-        public void Configure(EntityTypeBuilder<Movie> builder)
+        public void Configure(EntityTypeBuilder<MovieModel> builder)
         {
             builder.HasKey(x => x.MovieId);
 
@@ -36,6 +36,20 @@ namespace DAL.Maps
 
             builder.Property(p => p.CategoryId)
                    .HasColumnName("CategoryID");
+
+            builder.HasData(
+                new MovieModel
+                { 
+                    MovieId = 1L,
+                    Title = "Pulp Fiction",
+                    CategoryId = 1L
+                },
+                new MovieModel
+                { 
+                    MovieId = 2L,
+                    Title = "Friday the 13th",
+                    CategoryId = 2L
+                });
         }
     }
 }

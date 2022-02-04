@@ -1,3 +1,7 @@
+using BLL.Collections;
+using BLL.Comments;
+using BLL.Movies;
+using BLL.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -5,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +31,7 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "KinoFund API",
-                    Version = "v1"
-                });
-
-               
-            });
+            services.AddSwaggerGen();
 
             services.AddDbContext<DAL.data.MyContext>(
                 options => 
@@ -45,6 +39,11 @@ namespace WebAPI
                     options.UseSqlServer(Configuration.GetConnectionString("KinoFundDB"));
                     
                 });
+
+            services.AddTransient<UsersManager>();
+            services.AddTransient<MoviesManager>();
+            services.AddTransient<CommentsManager>();
+            services.AddTransient<CollectionsManager>();
 
         }
 
@@ -55,10 +54,10 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(options => 
+                app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "KinoFund API");
-                    options.RoutePrefix = "";
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = string.Empty;
                 });
             }
 

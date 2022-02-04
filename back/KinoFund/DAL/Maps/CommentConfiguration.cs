@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    public class CommentConfiguration : IEntityTypeConfiguration<CommentModel>
     {
-        public void Configure(EntityTypeBuilder<Comment> builder)
+        public void Configure(EntityTypeBuilder<CommentModel> builder)
         {
             builder.HasKey(x => x.CommentId);
 
@@ -25,7 +25,7 @@ namespace DAL.Maps
 
             builder.HasOne(x => x.RefersToNavigation)
                    .WithOne()
-                   .HasForeignKey<Comment>(x => x.RefersToCommentId);
+                   .HasForeignKey<CommentModel>(x => x.RefersToCommentId);
 
 
             builder.Property(p => p.CommentId)

@@ -9,19 +9,39 @@ using System.Threading.Tasks;
 
 namespace DAL.Maps
 {
-    public class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetail>
+    public class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetailModel>
     {
-        public void Configure(EntityTypeBuilder<MovieDetail> builder)
+        public void Configure(EntityTypeBuilder<MovieDetailModel> builder)
         {
 
             builder.HasKey(x => x.MovieId);
 
             builder.HasOne(x => x.Movie)
                    .WithOne(x => x.MovieDetail)
-                   .HasForeignKey<MovieDetail>(x => x.MovieId);
+                   .HasForeignKey<MovieDetailModel>(x => x.MovieId);
 
             builder.Property(x => x.MovieId)
                    .HasColumnName("MovieID");
+
+            builder.HasData(
+                new MovieDetailModel
+                { 
+                    MovieId = 1L,
+                    Country = "USA",
+                    ReleaseDate = new DateTime(1994, 8, 21),
+                    PEGI = "18+",
+                    Picture = "someJPG",
+                    Description = "someDescription"
+                },
+                new MovieDetailModel
+                { 
+                    MovieId = 2L,
+                    Country = "USA",
+                    ReleaseDate = new DateTime(1980, 2, 13),
+                    PEGI = "16+",
+                    Picture = "SomeJPG",
+                    Description = "someDescription"
+                });
         }
     }
 }
