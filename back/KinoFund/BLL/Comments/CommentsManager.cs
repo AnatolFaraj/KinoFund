@@ -1,4 +1,5 @@
 ﻿using Core.Dtos.Comments;
+using Core.Models;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,94 +18,54 @@ namespace BLL.Comments
         {
             _dbContext = context;
         }
-        public static List<SubCommentIdDTO> GetCommentsHierarchy(ICollection<Core.Models.CommentModel> allComments, long parentCommentId)
+        
+
+        private List<CommentDTO> GetCommetsDTO(List<CommentModel> comments)
         {
-            var hierarchy = new List<SubCommentIdDTO>();
+            return comments.Select(c => new CommentDTO 
+            { 
+                CommentId = c.CommentId,
+                ParentCommentId = c.RefersToCommentId,
+                Date = c.Date,
+                Text = c.Text,
+                UserId = c.UserId,
+                UserName = c.User.UserName,
+                NumberOfComments = _dbContext.Comments.Count(ch => ch.RefersToCommentId == c.CommentId) 
             
-            var subComments = allComments.Where(x => x.RefersToCommentId == parentCommentId);
-            
+            }).ToList();
+        } 
 
-            foreach(var sub in subComments)
-            {
-                
-                hierarchy.Add(new SubCommentIdDTO() { SubCommentId = sub.CommentId, SubComments = GetCommentsHierarchy(allComments, sub.CommentId) });
-            }
 
-            return hierarchy;
 
-        }
-
-        public static int TotalSubCommentsCount(List<SubCommentIdDTO> comments)
-        {
-            int returnCount = comments.Count;
-
-            foreach(var comment in comments)
-            {
-                returnCount += TotalSubCommentsCount(comment.SubComments);
-            }
-
-            return returnCount;
-        }
         
         public async Task<GetAllComentsDTO> GetAllAsync(long movieId)
         {
-            var allCommentsByMovie =  _dbContext.Comments
-                .Include(i => i.User)
-                .Include(i => i.Movie)
-                .Where(x => x.MovieId == movieId).ToList();
-
-            
-
-            var comments = await _dbContext.Comments
+            var allCommentsByMovie =  await _dbContext.Comments
                 .Include(i => i.User)
                 .Include(i => i.Movie)
                 .Where(x => x.MovieId == movieId)
-                .Select(c => new CommentDTO
-                {
-                    CommentId = c.CommentId,
-                    UserName = c.User.UserName,
-                    Text = c.Text,
-                    ParentCommentId = c.RefersToCommentId,
-                    NumberOfComments = TotalSubCommentsCount(GetCommentsHierarchy(allCommentsByMovie, c.CommentId)),
-                    SubComments = GetCommentsHierarchy(allCommentsByMovie, c.CommentId),
+                .Where(x => x.RefersToCommentId == null)
+                .ToListAsync();
 
 
-                }).ToListAsync();
+            var commentDTO = GetCommetsDTO(allCommentsByMovie);
 
 
             return new GetAllComentsDTO
             {
-                Comments = comments,
+                Comments = commentDTO,
             };
         }
 
-        public async Task<CommentDTO> GetAllSubsByIdAsync(long commentId)
+        public async Task<List<CommentDTO>> GetAllSubsByIdAsync(long commentId)
         {
 
-            var allSubCommentsByComment = _dbContext.Comments
-                .Where(x => x.CommentId == commentId)
-                .SelectMany(x => x.Movie.Comments)
-                .ToList();
-
-
-
-            var comment = await _dbContext.Comments
+            var allSubCommentsByComment = await _dbContext.Comments
                 .Include(i => i.User)
-                .Include(i => i.Movie)
-                .Where(x => x.CommentId == commentId)
-                .Select(c => new CommentDTO
-                {
-                    CommentId = c.CommentId,
-                    UserName = c.User.UserName,
-                    Text = c.Text,
-                    ParentCommentId = c.RefersToCommentId,
-                    NumberOfComments = TotalSubCommentsCount(GetCommentsHierarchy(allSubCommentsByComment, c.CommentId)),
-                    SubComments = GetCommentsHierarchy(allSubCommentsByComment, c.CommentId),
+                .Where(x => x.RefersToCommentId == commentId)
+                .ToListAsync();
 
-
-                }).FirstOrDefaultAsync();
-
-            return comment;
+            return GetCommetsDTO(allSubCommentsByComment);
         }
         
 
@@ -126,12 +87,12 @@ namespace BLL.Comments
 
         public async Task<long> CreateAsync(CreateCommentDTO commentDTO)
         {
-            var commentModel = new Core.Models.CommentModel()
+            var commentModel = new CommentModel()
             {
                 UserId = commentDTO.UserId,
                 MovieId = commentDTO.MovieId,
                 Text = commentDTO.Text,
-                RefersToCommentId = commentDTO.RefersTo
+                RefersToCommentId = commentDTO.ParentId
             };
             _dbContext.Comments.Add(commentModel);
 

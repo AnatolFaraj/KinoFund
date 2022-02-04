@@ -1,5 +1,5 @@
 ﻿using Core.Dtos.Movies;
-
+using Core.Models;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,7 +22,6 @@ namespace BLL.Movies
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
             var movies = await _dbContext.Movies
-                .Include(i => i.MovieDetail)
                 .Include(i => i.Category)
                 .Select(m => new MovieDTO
                 {
@@ -77,21 +76,24 @@ namespace BLL.Movies
 
         public async Task<long> CreateAsync(MovieInfoDTO movieDTO)
         {
-            var movieModel = new Core.Models.MovieModel()
+            var movieDetailModel = new MovieDetailModel()
+            {
+                Description = movieDTO.Description,
+                Picture = movieDTO.Picture,
+                ReleaseDate = movieDTO.ReleaseDate,
+                Country = movieDTO.Country,
+                PEGI = movieDTO.PEGI
+            };
+
+            var movieModel = new MovieModel()
             {
                 Title = movieDTO.Title,
-                MovieDetail = new Core.Models.MovieDetailModel()
-                {
-                    Description = movieDTO.Description,
-                    Picture = movieDTO.Picture,
-                    ReleaseDate = movieDTO.ReleaseDate,
-                    Country = movieDTO.Country,
-                    PEGI = movieDTO.PEGI
-                },
+                MovieDetail = movieDetailModel,
                 CategoryId = movieDTO.CategoryId
                 
             };
 
+            _dbContext.MovieDetails.Add(movieDetailModel);
             _dbContext.Movies.Add(movieModel);
 
             await _dbContext.SaveChangesAsync();

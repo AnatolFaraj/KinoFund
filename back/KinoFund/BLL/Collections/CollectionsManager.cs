@@ -1,5 +1,6 @@
 ﻿using Core.Dtos.Collections;
 using Core.Dtos.Movies;
+using Core.Models;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -63,7 +64,7 @@ namespace BLL.Collections
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
 
 
-            var collectionModel = new Core.Models.CollectionModel()
+            var collectionModel = new CollectionModel()
             {
                 Name = collectionDTO.Name,
                 Type = collectionDTO.Type,
@@ -105,7 +106,7 @@ namespace BLL.Collections
         {
             var collection = await _dbContext.Collections
                 .Where(c => c.CollectionId == collectionId)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
 
             _dbContext.Collections.Remove(collection);
             await _dbContext.SaveChangesAsync();

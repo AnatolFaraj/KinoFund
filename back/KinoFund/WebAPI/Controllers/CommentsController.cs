@@ -26,26 +26,26 @@ namespace WebAPI.Controllers
             return comments;
         }
         [HttpGet("{commentId}")]
-        public async Task<CommentDTO> GetAllSubsByIdAsync(long commentId)
+        public async Task<List<CommentDTO>> GetAllSubsByIdAsync(long commentId)
         {
             var subComments = await _commentsManager.GetAllSubsByIdAsync(commentId);
                 return subComments;
         }
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<IActionResult> CreateAsync(CreateCommentDTO commentDTO)
         {
             var newCommentId = await _commentsManager.CreateAsync(commentDTO);
             return Ok(newCommentId);
         }
 
-        [HttpPut("edit")]
+        [HttpPut("{commentId}")]
         public async Task<IActionResult> EditAsync(EditCommentDto commentDTO)
         {
             await _commentsManager.EditAsync(commentDTO);
             return Ok(commentDTO);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{commentId}")]
         public async Task<IActionResult> DeleteAsync(long commentId)
         {
             await _commentsManager.DeleteAsync(commentId);

@@ -10,7 +10,7 @@ namespace Core.Dtos.Comments
     {
         public long UserId { get; set; }
         public long MovieId { get; set; }
-        public long? RefersTo { get; set; }
+        public long? ParentId { get; set; }
         public string Text { get; set; }
     }
 }

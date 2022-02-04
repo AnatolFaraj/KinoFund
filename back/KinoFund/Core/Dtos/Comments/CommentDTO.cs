@@ -19,7 +19,7 @@ namespace Core.Dtos.Comments
         public long? ParentCommentId { get; set; }
 
         public int NumberOfComments { get; set; }
-        public List<SubCommentIdDTO> SubComments { get; set; }
+        
 
 
 

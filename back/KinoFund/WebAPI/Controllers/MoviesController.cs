@@ -43,14 +43,14 @@ namespace WebAPI.Controllers
             return Ok(movieModel);
         }
 
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
              var newCommentId = await _moviesManager.CreateAsync(movieModel);
             return Ok(newCommentId);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{movieId}")]
         public async Task<IActionResult> DeleteAsync(long movieId)
         {
             await _moviesManager.DeleteAsync(movieId);
