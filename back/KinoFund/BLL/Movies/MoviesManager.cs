@@ -130,7 +130,20 @@ namespace BLL.Movies
             return true;
         }
 
-        
+        public async Task<long> SetScoreAsync(SetMovieRatingDTO ratingDTO)
+        {
+            var ratingModel = new RatingModel()
+            {
+                MovieId = ratingDTO.MovieId,
+                UserId = ratingDTO.UserId,
+                Value = ratingDTO.Value
+            };
+            
+            _dbContext.Ratings.Add(ratingModel);
+            await _dbContext.SaveChangesAsync();
+
+            return ratingModel.MovieId;
+        }
 
         
     }
