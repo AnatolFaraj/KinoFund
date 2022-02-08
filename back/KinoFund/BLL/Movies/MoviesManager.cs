@@ -1,7 +1,10 @@
 ﻿using Core.Dtos.Movies;
 using Core.Models;
 using DAL.data;
+using DAL.Repositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +16,39 @@ namespace BLL.Movies
     public class MoviesManager
     {
         private readonly MyContext _dbContext;
+        private readonly RatingRepository _ratingRepo;
 
-        public MoviesManager(MyContext context)
+        public MoviesManager(MyContext context, RatingRepository repository)
         {
             _dbContext = context;
-        }
+            _ratingRepo = repository;
 
+        }
+        
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
+            Dictionary<long, int> ratings = new Dictionary<long, int>();
+
             var movies = await _dbContext.Movies
                 .Include(i => i.Category)
-                .Select(m => new MovieDTO
-                {
-                    MovieId = m.MovieId,
-                    Title = m.Title,
-                    CategoryName = m.Category.Name
+                .ToListAsync();
 
-                }).OrderBy(t => t.Title).ToListAsync();
-            
+            foreach (var movie in movies)
+            {
+
+                ratings.Add(movie.MovieId, _ratingRepo.GetValueByMovieId(movie.MovieId));
+            }
+
             return new GetAllMoviesDTO
             {
-                Movies = movies,
+                Movies = movies.Select(m => new MovieDTO
+                { 
+                    MovieId = m.MovieId,
+                    CategoryName = m.Category.Name,
+                    Title = m.Title,
+                    Rating = ratings[m.MovieId]
+
+                }).OrderBy(x => x.Title).ToList()
             };
         }
 
@@ -44,7 +59,9 @@ namespace BLL.Movies
                 .Include(i => i.MovieDetail)
                 .FirstAsync(m => m.MovieId == movieId);
 
-            return movieModel.ToDto();
+            var rating = _ratingRepo.GetValueByMovieId(movieId);
+
+            return movieModel.ToDto(rating);
         }
 
         public async Task<bool> EditAsync(MovieInfoDTO movieDTO)

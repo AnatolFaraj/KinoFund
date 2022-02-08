@@ -40,6 +40,7 @@ namespace WebAPI
                     
                 });
 
+            services.AddTransient<DAL.Repositories.RatingRepository>();
             services.AddTransient<UsersManager>();
             services.AddTransient<MoviesManager>();
             services.AddTransient<CommentsManager>();
