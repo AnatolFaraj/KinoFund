@@ -9,12 +9,12 @@ namespace DAL.Migrations
             var sp = @"CREATE PROCEDURE [dbo].[spGetTotalMovieRating]
 
                         @MovieId BIGINT,
-						@TotalRating INT output
+						@TotalRating FLOAT output
                         AS
                         BEGIN
 						set nocount on;
 	                        SELECT
-	                        @TotalRating = avg(Value)
+	                        @TotalRating = SUM(Value) / COUNT(Value)
 	                        FROM dbo.Ratings
 	                        WHERE MovieID = @MovieId
 							return;

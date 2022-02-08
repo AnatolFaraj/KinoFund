@@ -25,7 +25,7 @@ namespace Core.Dtos.Movies
     public static class MovieInfoDtoExtensionMethods
     {
         
-        public static MovieInfoDTO ToDto(this MovieModel movieModel, int rating)
+        public static MovieInfoDTO ToInfoDto(this MovieModel movieModel, int rating)
         {
 
             

@@ -1,4 +1,5 @@
-﻿using DAL.data;
+﻿using Core.Interfaces;
+using DAL.data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class RatingRepository
+    public class RatingRepository : IRatingRepository
     {
         private readonly MyContext _dbContext;
 
@@ -33,5 +34,7 @@ namespace DAL.Repositories
 
             return Convert.ToInt32(outParam.Value);
         }
+
+        
     }
 }

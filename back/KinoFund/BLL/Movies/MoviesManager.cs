@@ -1,4 +1,5 @@
 ﻿using Core.Dtos.Movies;
+using Core.Interfaces;
 using Core.Models;
 using DAL.data;
 using DAL.Repositories;
@@ -16,39 +17,33 @@ namespace BLL.Movies
     public class MoviesManager
     {
         private readonly MyContext _dbContext;
-        private readonly RatingRepository _ratingRepo;
+        private readonly IRatingRepository _ratingRepo;
 
-        public MoviesManager(MyContext context, RatingRepository repository)
+        public MoviesManager(MyContext context, IRatingRepository ratingRepository)
         {
             _dbContext = context;
-            _ratingRepo = repository;
+            _ratingRepo = ratingRepository;
 
         }
         
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
-            Dictionary<long, int> ratings = new Dictionary<long, int>();
 
             var movies = await _dbContext.Movies
                 .Include(i => i.Category)
                 .ToListAsync();
 
+            var movieDtos = new List<MovieDTO>();
+
             foreach (var movie in movies)
             {
-
-                ratings.Add(movie.MovieId, _ratingRepo.GetValueByMovieId(movie.MovieId));
+                var rating = _ratingRepo.GetValueByMovieId(movie.MovieId);
+                movieDtos.Add(movie.ToDto(rating));
             }
 
             return new GetAllMoviesDTO
             {
-                Movies = movies.Select(m => new MovieDTO
-                { 
-                    MovieId = m.MovieId,
-                    CategoryName = m.Category.Name,
-                    Title = m.Title,
-                    Rating = ratings[m.MovieId]
-
-                }).OrderBy(x => x.Title).ToList()
+                Movies = movieDtos,
             };
         }
 
@@ -61,7 +56,7 @@ namespace BLL.Movies
 
             var rating = _ratingRepo.GetValueByMovieId(movieId);
 
-            return movieModel.ToDto(rating);
+            return movieModel.ToInfoDto(rating);
         }
 
         public async Task<bool> EditAsync(MovieInfoDTO movieDTO)
