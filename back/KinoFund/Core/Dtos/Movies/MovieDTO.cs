@@ -12,7 +12,9 @@ namespace Core.Dtos.Movies
         public string Title { get; set; }
 
         public string CategoryName { get; set; }
+
         public int Rating { get; set; }
+
 
     }
 }

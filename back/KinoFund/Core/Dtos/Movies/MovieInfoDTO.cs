@@ -18,17 +18,21 @@ namespace Core.Dtos.Movies
         public DateTime? ReleaseDate { get; set; }
         public string Country { get; set; }
         public string PEGI { get; set; }
+
         public int Rating { get; set; }
+
 
     }
 
     public static class MovieInfoDtoExtensionMethods
     {
+
         
         public static MovieInfoDTO ToDto(this MovieModel movieModel, int rating)
         {
 
             
+
 
             return new MovieInfoDTO
             {
@@ -40,7 +44,9 @@ namespace Core.Dtos.Movies
                 ReleaseDate = movieModel.MovieDetail.ReleaseDate,
                 Country = movieModel.MovieDetail.Country,
                 PEGI = movieModel.MovieDetail.PEGI,
+
                 Rating = rating
+
 
 
             };

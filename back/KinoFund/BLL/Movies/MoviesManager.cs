@@ -1,10 +1,12 @@
 ﻿using Core.Dtos.Movies;
 using Core.Models;
 using DAL.data;
+
 using DAL.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace BLL.Movies
     public class MoviesManager
     {
         private readonly MyContext _dbContext;
+
         private readonly RatingRepository _ratingRepo;
 
         public MoviesManager(MyContext context, RatingRepository repository)
@@ -49,6 +52,7 @@ namespace BLL.Movies
                     Rating = ratings[m.MovieId]
 
                 }).OrderBy(x => x.Title).ToList()
+
             };
         }
 
@@ -59,9 +63,11 @@ namespace BLL.Movies
                 .Include(i => i.MovieDetail)
                 .FirstAsync(m => m.MovieId == movieId);
 
+
             var rating = _ratingRepo.GetValueByMovieId(movieId);
 
             return movieModel.ToDto(rating);
+
         }
 
         public async Task<bool> EditAsync(MovieInfoDTO movieDTO)
