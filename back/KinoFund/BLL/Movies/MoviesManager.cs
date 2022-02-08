@@ -2,10 +2,12 @@
 using Core.Interfaces;
 using Core.Models;
 using DAL.data;
+
 using DAL.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +55,7 @@ namespace BLL.Movies
                 .Include(i => i.Category)
                 .Include(i => i.MovieDetail)
                 .FirstAsync(m => m.MovieId == movieId);
+
 
             var rating = _ratingRepo.GetValueByMovieId(movieId);
 
