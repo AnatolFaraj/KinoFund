@@ -19,7 +19,7 @@ namespace DAL.Repositories
             _dbContext = context;
         }
 
-        public int GetValueByMovieId(long movieId)
+        public float GetValueByMovieId(long movieId)
         {
             var inParam = new SqlParameter("@movieId", movieId);
             var outParam = new SqlParameter
@@ -32,7 +32,7 @@ namespace DAL.Repositories
 
             var procedure = _dbContext.Database.ExecuteSqlRaw("spGetTotalMovieRating @movieId, @outputValue OUT", inParam, outParam);
 
-            return Convert.ToInt32(outParam.Value);
+            return Convert.ToSingle(outParam.Value);
         }
 
         

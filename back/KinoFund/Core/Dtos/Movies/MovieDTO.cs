@@ -14,14 +14,14 @@ namespace Core.Dtos.Movies
 
         public string CategoryName { get; set; }
 
-        public int Rating { get; set; }
+        public float Rating { get; set; }
 
 
     }
 
     public static class MovieDtoExtensionMethods
     {
-        public static MovieDTO ToDto(this MovieModel movieModel, int rating)
+        public static MovieDTO ToDto(this MovieModel movieModel, float rating)
         {
             return new MovieDTO
             {

@@ -19,7 +19,7 @@ namespace Core.Dtos.Movies
         public string Country { get; set; }
         public string PEGI { get; set; }
 
-        public int Rating { get; set; }
+        public float Rating { get; set; }
 
 
     }
@@ -28,7 +28,7 @@ namespace Core.Dtos.Movies
     {
 
         
-        public static MovieInfoDTO ToInfoDto(this MovieModel movieModel, int rating)
+        public static MovieInfoDTO ToInfoDto(this MovieModel movieModel, float rating)
         {
 
             

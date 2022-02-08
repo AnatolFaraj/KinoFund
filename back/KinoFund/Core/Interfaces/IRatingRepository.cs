@@ -8,6 +8,6 @@ namespace Core.Interfaces
 {
     public interface IRatingRepository
     {
-        public int GetValueByMovieId(long movieId);
+        public float GetValueByMovieId(long movieId);
     }
 }
