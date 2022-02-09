@@ -46,8 +46,15 @@ namespace WebAPI.Controllers
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
-             var newCommentId = await _moviesManager.CreateAsync(movieModel);
-            return Ok(newCommentId);
+             var newMovieId = await _moviesManager.CreateAsync(movieModel);
+            return Ok(newMovieId);
+        }
+
+        [HttpPost("{movieId}/score")]
+        public async Task<IActionResult> SetScoreAsync(SetMovieRatingDTO movieRatingDTO)
+        {
+            var scoredMovieId = await _moviesManager.SetScoreAsync(movieRatingDTO);
+            return Ok(scoredMovieId);
         }
 
         [HttpDelete("{movieId}")]

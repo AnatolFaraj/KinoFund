@@ -1,7 +1,13 @@
 ﻿using Core.Dtos.Movies;
+using Core.Interfaces;
 using Core.Models;
 using DAL.data;
+
+using DAL.Repositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +19,33 @@ namespace BLL.Movies
     public class MoviesManager
     {
         private readonly MyContext _dbContext;
+        private readonly IRatingRepository _ratingRepo;
 
-        public MoviesManager(MyContext context)
+        public MoviesManager(MyContext context, IRatingRepository ratingRepository)
         {
             _dbContext = context;
-        }
+            _ratingRepo = ratingRepository;
 
+        }
+        
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
+
             var movies = await _dbContext.Movies
                 .Include(i => i.Category)
-                .Select(m => new MovieDTO
-                {
-                    MovieId = m.MovieId,
-                    Title = m.Title,
-                    CategoryName = m.Category.Name
+                .ToListAsync();
 
-                }).OrderBy(t => t.Title).ToListAsync();
-            
+            var movieDtos = new List<MovieDTO>();
+
+            foreach (var movie in movies)
+            {
+                var rating = _ratingRepo.GetValueByMovieId(movie.MovieId);
+                movieDtos.Add(movie.ToDto(rating));
+            }
+
             return new GetAllMoviesDTO
             {
-                Movies = movies,
+                Movies = movieDtos,
             };
         }
 
@@ -44,7 +56,10 @@ namespace BLL.Movies
                 .Include(i => i.MovieDetail)
                 .FirstAsync(m => m.MovieId == movieId);
 
-            return movieModel.ToDto();
+
+            var rating = _ratingRepo.GetValueByMovieId(movieId);
+
+            return movieModel.ToInfoDto(rating);
         }
 
         public async Task<bool> EditAsync(MovieInfoDTO movieDTO)
@@ -115,7 +130,20 @@ namespace BLL.Movies
             return true;
         }
 
-        
+        public async Task<long> SetScoreAsync(SetMovieRatingDTO ratingDTO)
+        {
+            var ratingModel = new RatingModel()
+            {
+                MovieId = ratingDTO.MovieId,
+                UserId = ratingDTO.UserId,
+                Value = ratingDTO.Value
+            };
+            
+            _dbContext.Ratings.Add(ratingModel);
+            await _dbContext.SaveChangesAsync();
+
+            return ratingModel.MovieId;
+        }
 
         
     }

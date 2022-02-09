@@ -2,6 +2,8 @@ using BLL.Collections;
 using BLL.Comments;
 using BLL.Movies;
 using BLL.Users;
+using DAL.Repositories;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +42,7 @@ namespace WebAPI
                     
                 });
 
+            services.AddTransient<IRatingRepository, RatingRepository>();
             services.AddTransient<UsersManager>();
             services.AddTransient<MoviesManager>();
             services.AddTransient<CommentsManager>();

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Core.Dtos.Movies
 {
     public class MovieInfoDTO
@@ -18,13 +19,21 @@ namespace Core.Dtos.Movies
         public string Country { get; set; }
         public string PEGI { get; set; }
 
+        public float Rating { get; set; }
+
 
     }
 
     public static class MovieInfoDtoExtensionMethods
     {
-        public static MovieInfoDTO ToDto(this MovieModel movieModel)
+
+        
+        public static MovieInfoDTO ToInfoDto(this MovieModel movieModel, float rating)
         {
+
+            
+
+
             return new MovieInfoDTO
             {
                 MovieId = movieModel.MovieId,
@@ -35,6 +44,10 @@ namespace Core.Dtos.Movies
                 ReleaseDate = movieModel.MovieDetail.ReleaseDate,
                 Country = movieModel.MovieDetail.Country,
                 PEGI = movieModel.MovieDetail.PEGI,
+
+                Rating = rating
+
+
 
             };
         }
