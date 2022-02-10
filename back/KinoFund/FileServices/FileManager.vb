@@ -4,15 +4,15 @@ Imports System
 
 Public Class FileManager
 
-    Shared Async Function SaveFileAsync(incomingFile As Byte(), fileName As String) As Task(Of String)
+    Public Async Function SaveFileAsync(incomingFile As Byte(), fileName As String) As Task(Of String)
 
         Dim newFileName As String
 
         Try
 
             newFileName = Guid.NewGuid().ToString() + fileName
-
-            Dim savePath As String = Path.Combine(Directory.GetCurrentDirectory(), "images", newFileName)
+            Dim solutionDirectory As String = Directory.GetParent(Environment.CurrentDirectory).FullName
+            Dim savePath As String = Path.Combine(solutionDirectory, "FileServices\images", newFileName)
 
             Using str As New FileStream(savePath, FileMode.Create)
 
@@ -22,9 +22,7 @@ Public Class FileManager
 
         Catch ex As Exception
 
-            Return ex.InnerException.Message
-
-
+            Throw New Exception(ex.InnerException.Message)
 
         End Try
 
@@ -32,14 +30,23 @@ Public Class FileManager
 
     End Function
 
-    Shared Async Function GetFileAsync(fileName As String) As Task(Of Byte())
+    Public Async Function GetFileAsync(fileName As String) As Task(Of Byte())
 
+        Dim fileInBytes As Byte()
 
-        Dim filePath As String = Path.Combine(Directory.GetCurrentDirectory(), "images", fileName)
+        Try
 
-        Dim fileInBytes As Byte() = Await File.ReadAllBytesAsync(filePath)
+            Dim solutionDirectory As String = Directory.GetParent(Environment.CurrentDirectory).FullName
 
+            Dim filePath As String = Path.Combine(solutionDirectory, "FileServices\images", fileName)
 
+            fileInBytes = Await File.ReadAllBytesAsync(filePath)
+
+        Catch ex As Exception
+
+            Throw New Exception(ex.InnerException.Message)
+
+        End Try
 
         Return fileInBytes
 

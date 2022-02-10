@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using FileServices;
 
 namespace WebAPI
 {
@@ -47,6 +47,7 @@ namespace WebAPI
             services.AddTransient<MoviesManager>();
             services.AddTransient<CommentsManager>();
             services.AddTransient<CollectionsManager>();
+            services.AddTransient<FileManager>();
 
         }
 
