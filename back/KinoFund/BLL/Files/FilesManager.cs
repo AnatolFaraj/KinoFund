@@ -15,18 +15,26 @@ namespace BLL.Files
             _fileService = fileService;
         }
 
-        public async Task<FileUploadObject> UploadAsync(byte[] incomingFile, string fileName)
+        public async Task<string> UploadAsync(byte[] incomingFile, string fileName)
         {
             var fileObj = await _fileService.UploadAsync(incomingFile, fileName);
+            if(fileObj.IsValid == false)
+            {
+                throw new Exception(fileObj.ErrorMessage);
+            }
 
-            return fileObj;
+            return fileObj.FileKey;
         }
 
-        public async Task<FileDownloadObject> DownloadAsync(string fileKey)
+        public async Task<byte[]> DownloadAsync(string fileKey)
         {
-            var file = await _fileService.DownloadAsync(fileKey);
+            var fileObj = await _fileService.DownloadAsync(fileKey);
+            if(fileObj.IsValid == false)
+            {
+                throw new Exception(fileObj.ErrorMessage);
+            }
 
-            return file;
+            return fileObj.FileArray;
         }
     }
 }

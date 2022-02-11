@@ -47,8 +47,7 @@ Public Class FileService
         Return New FileUploadObject With
         {
            .FileKey = key,
-           .IsValid = True,
-           .ErrorMessage = "Success."
+           .IsValid = True
         }
 
 
@@ -97,8 +96,7 @@ Public Class FileService
         {
             .FileArray = fileInBytes,
             .FileName = fileName,
-            .IsValid = True,
-            .ErrorMessage = "Success."
+            .IsValid = True
         }
 
 

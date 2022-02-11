@@ -25,9 +25,9 @@ namespace WebAPI.Controllers
         [HttpGet("{fileKey}")]
         public async Task<IActionResult> DownloadAsync(string fileKey)
         {
-            var fileObj = await _filesManager.DownloadAsync(fileKey);
+            var file = await _filesManager.DownloadAsync(fileKey);
             
-            return Ok(fileObj);
+            return File(file, "image/png");
             
         }
 
@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         [HttpPost("")]
         public async Task<IActionResult> UploadAsync(IFormFile incomingFile, string fileName)
         {
-            FileUploadObject fileObj = null;
+            string fileKey = null;
 
             if (incomingFile.Length > 0)
             {
@@ -43,12 +43,12 @@ namespace WebAPI.Controllers
                 {
                     await incomingFile.CopyToAsync(ms);
                     var fileInBytes = ms.ToArray();
-                    fileObj = await _filesManager.UploadAsync(fileInBytes, fileName);
+                    fileKey = await _filesManager.UploadAsync(fileInBytes, fileName);
                     
                 }
             }
 
-            return Ok(fileObj);
+            return Ok(fileKey);
         }
     }
 }
