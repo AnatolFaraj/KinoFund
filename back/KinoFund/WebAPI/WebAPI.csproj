@@ -22,7 +22,6 @@
 		<ProjectReference Include="..\BLL\BLL.csproj" />
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\DAL\DAL.csproj" />
-		<ProjectReference Include="..\FileServices\FileServices.vbproj" />
 	</ItemGroup>
 	
 </Project>

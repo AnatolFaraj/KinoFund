@@ -1,4 +1,5 @@
-﻿using FileServices;
+﻿using BLL.Files;
+using FileServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,37 +14,41 @@ namespace WebAPI.Controllers
     [ApiController]
     public class FileStorageController : ControllerBase
     {
-        private readonly FileManager _fileManager;
-        public FileStorageController(FileManager fileManager)
+
+        private readonly FilesManager _filesManager;
+
+        public FileStorageController(FilesManager filesManager)
         {
-            _fileManager = fileManager;
+            _filesManager = filesManager;
         }
 
-
-        [HttpGet("{fileName}")]
-        public async Task<IActionResult> GetFileAsync(string fileName)
+        [HttpGet("{fileKey}")]
+        public async Task<IActionResult> DownloadAsync(string fileKey)
         {
-            var file = await _fileManager.GetFileAsync(fileName);
-            return File(file, "image/png");
+            var fileObj = await _filesManager.DownloadAsync(fileKey);
+            
+            return Ok(fileObj);
+            
         }
 
 
         [HttpPost("")]
-        public async Task<IActionResult> SaveFileAsync(IFormFile incomingFile, string fileName)
+        public async Task<IActionResult> UploadAsync(IFormFile incomingFile, string fileName)
         {
-            string newFileName = null;
+            FileUploadObject fileObj = null;
 
-            if(incomingFile.Length > 0)
+            if (incomingFile.Length > 0)
             {
                 using(var ms = new MemoryStream())
                 {
                     await incomingFile.CopyToAsync(ms);
                     var fileInBytes = ms.ToArray();
-                    newFileName = await _fileManager.SaveFileAsync(fileInBytes, fileName);
+                    fileObj = await _filesManager.UploadAsync(fileInBytes, fileName);
+                    
                 }
             }
 
-            return Ok(newFileName);
+            return Ok(fileObj);
         }
     }
 }
