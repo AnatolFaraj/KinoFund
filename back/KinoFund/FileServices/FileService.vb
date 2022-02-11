@@ -12,35 +12,34 @@ Public Class FileService
 
         Dim key As String = String.Empty
         Try
-            If IsValid(incomingFile) Then
+            If IsValid(incomingFile) = False Then
 
-                key = Guid.NewGuid().ToString()
-                Dim extension As String = Path.GetExtension(fileName)
-                newFileName = key + extension
-
-                Dim solutionDirectory As String = Directory.GetParent(Environment.CurrentDirectory).FullName
-                Dim savePath As String = Path.Combine(solutionDirectory, "FileServices\images", newFileName)
-
-                Using str As New FileStream(savePath, FileMode.Create)
-
-                    Await str.WriteAsync(incomingFile, 0, incomingFile.Length)
-
-                End Using
-
-            Else
-
-                Throw New Exception()
+                Return New FileUploadObject With
+                {
+                    .IsValid = False,
+                    .ErrorMessage = "File is too big. Size limit - 10MB"
+                }
 
             End If
+
+            key = Guid.NewGuid().ToString()
+            Dim extension As String = Path.GetExtension(fileName)
+            newFileName = key + extension
+
+            Dim solutionDirectory As String = Directory.GetParent(Environment.CurrentDirectory).FullName
+            Dim savePath As String = Path.Combine(solutionDirectory, "FileServices\images", newFileName)
+
+            Using str As New FileStream(savePath, FileMode.Create)
+
+                Await str.WriteAsync(incomingFile, 0, incomingFile.Length)
+
+            End Using
 
 
         Catch ex As Exception
 
-            Return New FileUploadObject With
-            {
-                .IsValid = False,
-                .ErrorMessage = "File is too big. Size limit - 10MB"
-            }
+            Throw New Exception(ex.InnerException.Message)
+
 
         End Try
 
@@ -68,27 +67,24 @@ Public Class FileService
 
             fileName = Path.GetFileName(returnFilePath)
 
+            If File.Exists(returnFilePath) = False Then
 
 
-            If File.Exists(returnFilePath) Then
-
-                fileInBytes = Await File.ReadAllBytesAsync(returnFilePath)
-
-            Else
-
-                Throw New Exception()
+                Return New FileDownloadObject With
+                {
+                    .IsValid = False,
+                    .ErrorMessage = "File not found."
+                }
 
 
             End If
 
+            fileInBytes = Await File.ReadAllBytesAsync(returnFilePath)
+
 
         Catch ex As Exception
 
-            Return New FileDownloadObject With
-            {
-                .IsValid = False,
-                .ErrorMessage = "File not found."
-            }
+            Throw New Exception(ex.InnerException.Message)
 
         End Try
 
