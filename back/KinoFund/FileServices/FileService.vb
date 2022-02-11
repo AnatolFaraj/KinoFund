@@ -38,7 +38,12 @@ Public Class FileService
 
         Catch ex As Exception
 
-            Throw New Exception(ex.InnerException.Message)
+            Return New FileUploadObject With
+            {
+                .IsValid = False,
+                .ErrorMessage = ex.InnerException.Message
+            }
+
 
 
         End Try
@@ -84,7 +89,12 @@ Public Class FileService
 
         Catch ex As Exception
 
-            Throw New Exception(ex.InnerException.Message)
+            Return New FileDownloadObject With
+            {
+                .IsValid = False,
+                .ErrorMessage = ex.InnerException.Message
+            }
+
 
         End Try
 

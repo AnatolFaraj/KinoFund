@@ -18,6 +18,7 @@ namespace BLL.Files
         public async Task<string> UploadAsync(byte[] incomingFile, string fileName)
         {
             var fileObj = await _fileService.UploadAsync(incomingFile, fileName);
+
             if(fileObj.IsValid == false)
             {
                 throw new Exception(fileObj.ErrorMessage);
@@ -29,6 +30,7 @@ namespace BLL.Files
         public async Task<byte[]> DownloadAsync(string fileKey)
         {
             var fileObj = await _fileService.DownloadAsync(fileKey);
+
             if(fileObj.IsValid == false)
             {
                 throw new Exception(fileObj.ErrorMessage);
