@@ -17,6 +17,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.Files;
 using FileServices;
+using Core.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using BLL.Authentification;
 
 namespace WebAPI
 {
@@ -50,6 +55,36 @@ namespace WebAPI
             services.AddTransient<CollectionsManager>();
             services.AddTransient<FileService>();
             services.AddTransient<FilesManager>();
+            services.AddTransient<AuthenticationManager>();
+            services.AddTransient<IJWTTokenRepository, JWTTokenRepository>();
+
+            var jwtSection = Configuration.GetSection("JWTsettings");
+            services.Configure<JWTSettings>(jwtSection);
+
+
+            var key = Encoding.ASCII.GetBytes(jwtSection.Get<JWTSettings>().SecretKey);
+            
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(
+                options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
+                    };
+
+                });
 
         }
 
@@ -71,6 +106,7 @@ namespace WebAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

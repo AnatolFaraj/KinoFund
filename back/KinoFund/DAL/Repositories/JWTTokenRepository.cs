@@ -1,0 +1,48 @@
+﻿using Core.Configuration;
+using Core.Interfaces;
+using Core.Models;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Repositories
+{
+    public class JWTTokenRepository : IJWTTokenRepository
+    {
+        private readonly JWTSettings _jwtSettings;
+        public JWTTokenRepository(IOptions<JWTSettings> jwtSettings)
+        {
+
+            _jwtSettings = jwtSettings.Value;
+        }
+
+        public string GenerateJWTToken(UserModel userModel)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, userModel.Credential.Email),
+                    new Claim(ClaimTypes.Role, Convert.ToInt32(userModel.Type).ToString())
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature),
+                
+
+            };
+            var createdToken = tokenHandler.CreateToken(tokenDescriptor);
+            var GeneratedToken = tokenHandler.WriteToken(createdToken);
+
+            return GeneratedToken;
+        }
+    }
+}

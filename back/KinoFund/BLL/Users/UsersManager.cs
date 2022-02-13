@@ -1,10 +1,8 @@
-﻿using Core.Dtos.Users;
+﻿
+using Core.Dtos.Users;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BLL.Users
@@ -46,5 +44,7 @@ namespace BLL.Users
 
             return userModel.ToDto();
         }
+
+        
     }
 }

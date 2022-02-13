@@ -1,6 +1,6 @@
 ﻿using BLL.Movies;
 using Core.Dtos.Movies;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +21,7 @@ namespace WebAPI.Controllers
             _moviesManager = moviesManager;
         }
 
+        [Authorize(Roles = "2")]
         [HttpGet("")]
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
