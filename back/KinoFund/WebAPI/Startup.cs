@@ -21,7 +21,7 @@ using Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using BLL.Authentification;
+using WebAPI.Helpers;
 
 namespace WebAPI
 {
@@ -55,8 +55,8 @@ namespace WebAPI
             services.AddTransient<CollectionsManager>();
             services.AddTransient<FileService>();
             services.AddTransient<FilesManager>();
-            services.AddTransient<AuthenticationManager>();
-            services.AddTransient<IJWTTokenRepository, JWTTokenRepository>();
+            services.AddTransient<AuthenticationService>();
+            services.AddTransient<JWTTokenService>();
 
             var jwtSection = Configuration.GetSection("JWTsettings");
             services.Configure<JWTSettings>(jwtSection);
@@ -73,7 +73,7 @@ namespace WebAPI
                 }).AddJwtBearer(
                 options =>
                 {
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

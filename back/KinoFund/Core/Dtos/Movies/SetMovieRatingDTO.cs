@@ -9,7 +9,6 @@ namespace Core.Dtos.Movies
     public class SetMovieRatingDTO
     {
         public long MovieId { get; set; }
-        public long UserId { get; set; }
         public int Value { get; set; }
     }
 }

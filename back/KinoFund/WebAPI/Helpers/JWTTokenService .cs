@@ -12,14 +12,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repositories
+namespace WebAPI.Helpers
 {
-    public class JWTTokenRepository : IJWTTokenRepository
+    public class JWTTokenService 
     {
         
 
         private readonly JWTSettings _jwtSettings;
-        public JWTTokenRepository(IOptions<JWTSettings> jwtSettings)
+        public JWTTokenService(IOptions<JWTSettings> jwtSettings)
         {
 
             _jwtSettings = jwtSettings.Value;
@@ -27,10 +27,7 @@ namespace DAL.Repositories
 
         
 
-        public Task DeleteToken(long userId)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public AccessTokenDTO GenerateJWTToken(UserModel userModel)
         {
@@ -52,14 +49,14 @@ namespace DAL.Repositories
 
             };
             var createdToken = tokenHandler.CreateToken(tokenDescriptor);
-            var GeneratedToken = tokenHandler.WriteToken(createdToken);
+            var generatedToken = tokenHandler.WriteToken(createdToken);
 
 
 
             return new AccessTokenDTO
             {
                 UserId = userModel.UserId,
-                Token = GeneratedToken
+                Token = generatedToken
             };
         }
     }

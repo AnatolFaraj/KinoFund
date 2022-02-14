@@ -1,4 +1,4 @@
-﻿using BLL.Authentification;
+﻿
 using Core.Dtos.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Helpers;
 
 namespace WebAPI.Controllers
 {
@@ -14,9 +15,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly AuthenticationManager _autManager;
+        private readonly AuthenticationService _autManager;
 
-        public AuthenticationController(AuthenticationManager authManager)
+        public AuthenticationController(AuthenticationService authManager)
         {
             _autManager = authManager;
         }
@@ -36,20 +37,12 @@ namespace WebAPI.Controllers
             return Ok(newUserId);
         }
 
-        [Authorize]
-        [HttpDelete("logout")]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            //string stringUserId = HttpContext.User.FindFirst("id").Value;
-
-            //if(!long.TryParse(stringUserId, out long userId))
-            //{
-            //    return Unauthorized();
-            //}
-
-            //await _autManager.LogoutAsync(userId);
-            //return NoContent();
-            throw new NotImplementedException();
-        }
+        //[Authorize]
+        //[HttpDelete("logout")]
+        //public async Task<IActionResult> LogoutAsync()
+        //{
+            
+        //    throw new NotImplementedException();
+        //}
     }
 }
