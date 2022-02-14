@@ -17,11 +17,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.Files;
 using FileServices;
+
 using Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Helpers;
+
 
 namespace WebAPI
 {
@@ -55,6 +57,7 @@ namespace WebAPI
             services.AddTransient<CollectionsManager>();
             services.AddTransient<FileService>();
             services.AddTransient<FilesManager>();
+
             services.AddTransient<AuthenticationService>();
             services.AddTransient<JWTTokenService>();
 
@@ -85,6 +88,7 @@ namespace WebAPI
                     };
 
                 });
+
 
         }
 

@@ -135,6 +135,7 @@ namespace BLL.Movies
             var ratingModel = new RatingModel()
             {
                 MovieId = ratingDTO.MovieId,
+
                 Value = ratingDTO.Value
             };
             
