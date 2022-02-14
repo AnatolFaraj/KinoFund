@@ -1,5 +1,6 @@
 ﻿using BLL.Files;
 using FileServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/fileStorage")]
     [ApiController]
     public class FileStorageController : ControllerBase

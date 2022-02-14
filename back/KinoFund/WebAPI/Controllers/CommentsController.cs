@@ -1,5 +1,6 @@
 ﻿using BLL.Comments;
 using Core.Dtos.Comments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/comments")]
     [ApiController]
     public class CommentsController : ControllerBase

@@ -42,10 +42,10 @@ namespace WebAPI
             services.AddSwaggerGen();
 
             services.AddDbContext<DAL.data.MyContext>(
-                options => 
+                options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("KinoFundDB"));
-                    
+
                 });
 
             services.AddTransient<IRatingRepository, RatingRepository>();
@@ -63,7 +63,7 @@ namespace WebAPI
 
 
             var key = Encoding.ASCII.GetBytes(jwtSection.Get<JWTSettings>().SecretKey);
-            
+
             services.AddAuthentication(
                 options =>
                 {

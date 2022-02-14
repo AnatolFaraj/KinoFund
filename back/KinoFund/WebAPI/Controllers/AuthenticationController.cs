@@ -1,5 +1,6 @@
 ﻿using BLL.Authentification;
 using Core.Dtos.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,10 +22,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<LoginDTO> LoginAsync(string password, string email)
+        public async Task<IActionResult> LoginAsync(string password, string email)
         {
             var loginDto = await _autManager.LoginAsync(password, email);
-            return loginDto;
+            
+            return Ok(loginDto);
         }
 
         [HttpPost("registration")]
@@ -32,6 +34,22 @@ namespace WebAPI.Controllers
         {
             var newUserId = await _autManager.RegisterAsync(registrationDTO);
             return Ok(newUserId);
+        }
+
+        [Authorize]
+        [HttpDelete("logout")]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            //string stringUserId = HttpContext.User.FindFirst("id").Value;
+
+            //if(!long.TryParse(stringUserId, out long userId))
+            //{
+            //    return Unauthorized();
+            //}
+
+            //await _autManager.LogoutAsync(userId);
+            //return NoContent();
+            throw new NotImplementedException();
         }
     }
 }

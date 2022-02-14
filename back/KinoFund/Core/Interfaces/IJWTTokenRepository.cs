@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using Core.Dtos.Authentication;
+using Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Core.Interfaces
 {
     public interface IJWTTokenRepository
     {
-        public string GenerateJWTToken(UserModel userModel);
+        public AccessTokenDTO GenerateJWTToken(UserModel userModel);
+        public Task DeleteToken(long userId);
     }
 }

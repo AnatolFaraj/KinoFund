@@ -1,4 +1,5 @@
 ﻿using Core.Configuration;
+using Core.Dtos.Authentication;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,8 @@ namespace DAL.Repositories
 {
     public class JWTTokenRepository : IJWTTokenRepository
     {
+        
+
         private readonly JWTSettings _jwtSettings;
         public JWTTokenRepository(IOptions<JWTSettings> jwtSettings)
         {
@@ -22,7 +25,14 @@ namespace DAL.Repositories
             _jwtSettings = jwtSettings.Value;
         }
 
-        public string GenerateJWTToken(UserModel userModel)
+        
+
+        public Task DeleteToken(long userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AccessTokenDTO GenerateJWTToken(UserModel userModel)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
@@ -30,10 +40,12 @@ namespace DAL.Repositories
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, userModel.Credential.Email),
-                    new Claim(ClaimTypes.Role, Convert.ToInt32(userModel.Type).ToString())
+                    new Claim("id", userModel.UserId.ToString()),
+                    new Claim(ClaimTypes.Email, userModel.Credential.Email),
+                    new Claim(ClaimTypes.Role, Convert.ToInt32(userModel.Type).ToString()),
+                    new Claim(ClaimTypes.Name, userModel.UserName)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature),
                 
@@ -42,7 +54,13 @@ namespace DAL.Repositories
             var createdToken = tokenHandler.CreateToken(tokenDescriptor);
             var GeneratedToken = tokenHandler.WriteToken(createdToken);
 
-            return GeneratedToken;
+
+
+            return new AccessTokenDTO
+            {
+                UserId = userModel.UserId,
+                Token = GeneratedToken
+            };
         }
     }
 }

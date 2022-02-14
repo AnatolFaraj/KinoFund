@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
             _moviesManager = moviesManager;
         }
 
-        [Authorize(Roles = "2")]
+        [Authorize]
         [HttpGet("")]
         public async Task<GetAllMoviesDTO> GetAllAsync()
         {
@@ -29,7 +30,7 @@ namespace WebAPI.Controllers
             return users;
         }
 
-
+        [Authorize]
         [HttpGet("{movieId}/info")]
         public async Task<MovieInfoDTO> GetInfoAsync(long movieId)
         {
@@ -37,6 +38,7 @@ namespace WebAPI.Controllers
             return movie;
         }
 
+        [Authorize(Roles = "2")]
         [HttpPut("{movieId}")]
         public async Task<IActionResult> EditAsync(MovieInfoDTO movieModel)
         {
@@ -44,6 +46,7 @@ namespace WebAPI.Controllers
             return Ok(movieModel);
         }
 
+        [Authorize(Roles = "2")]
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
@@ -51,6 +54,7 @@ namespace WebAPI.Controllers
             return Ok(newMovieId);
         }
 
+        [Authorize]
         [HttpPost("{movieId}/score")]
         public async Task<IActionResult> SetScoreAsync(SetMovieRatingDTO movieRatingDTO)
         {
@@ -58,6 +62,7 @@ namespace WebAPI.Controllers
             return Ok(scoredMovieId);
         }
 
+        [Authorize(Roles = "2")]
         [HttpDelete("{movieId}")]
         public async Task<IActionResult> DeleteAsync(long movieId)
         {

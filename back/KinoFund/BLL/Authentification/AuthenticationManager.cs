@@ -33,14 +33,16 @@ namespace BLL.Authentification
                 await _dbContext.SaveChangesAsync();
             }
 
-            var token = _jwtRepo.GenerateJWTToken(userModel);
-
-            return userModel.ToLoginDto(token);
+            var tokenDTO = _jwtRepo.GenerateJWTToken(userModel);
+  
+            return userModel.ToLoginDto(tokenDTO.Token);
         }
-        //public async Task LogoutAsync(LoginDTO loginDTO)
-        //{
-            
-        //}
+        public async Task<bool> LogoutAsync(long userId)
+        {
+            await _jwtRepo.DeleteToken(userId);
+
+            return true;
+        }
 
         public async Task<long> RegisterAsync(RegistrationDTO registrationDTO)
         {
