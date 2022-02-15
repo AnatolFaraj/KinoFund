@@ -13,28 +13,20 @@ namespace Core.Dtos.Authentication
         public long UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public string Token { get; set; }
         public UserType Role { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public int CommentsCount { get; set; }
-
     }
 
     public static class UserLoginDtoExtensions
     {
-        public static LoginDTO ToLoginDto(this UserModel userModel, string token)
+        public static LoginDTO ToLoginDto(this UserModel userModel)
         {
             return new LoginDTO
             {
                 UserId = userModel.UserId,
                 Name = userModel.UserName,
                 Email = userModel.Credential.Email,
-                Password = userModel.Credential.Password,
                 Role = userModel.Type,
-                DateOfBirth = userModel.DateOfBirth,
-                Token = token,
-                CommentsCount = userModel.Comments.Count
+
             };
         }
     }

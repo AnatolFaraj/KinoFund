@@ -16,18 +16,21 @@ namespace WebAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly AuthenticationService _autManager;
+        private readonly JWTTokenService _jwtService;
 
-        public AuthenticationController(AuthenticationService authManager)
+        public AuthenticationController(AuthenticationService authManager, JWTTokenService jwtService)
         {
             _autManager = authManager;
+            _jwtService = jwtService;
         }
 
         [HttpGet("login")]
-        public async Task<IActionResult> LoginAsync(string password, string email)
+        public async Task<IActionResult> LoginAsync(string email, string password)
         {
-            var loginDto = await _autManager.LoginAsync(password, email);
-            
-            return Ok(loginDto);
+            var loginDTO = await _autManager.LoginAsync(email, password);
+            var tokenDTO = _jwtService.GenerateJWTToken(loginDTO);
+
+            return Ok(tokenDTO);
         }
 
         [HttpPost("registration")]

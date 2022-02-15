@@ -13,18 +13,17 @@ namespace WebAPI.Helpers
     public class AuthenticationService
     {
         private readonly MyContext _dbContext;
-        private readonly JWTTokenService _jwtService;
-        public AuthenticationService(MyContext context, JWTTokenService jwtService)
+
+        public AuthenticationService(MyContext context)
         {
             _dbContext = context;
-            _jwtService = jwtService;
+
         }
 
-        public async Task<LoginDTO> LoginAsync(string password, string email)
+        public async Task<LoginDTO> LoginAsync(string email, string password)
         {
             var userModel = await _dbContext.Users
                 .Include(i => i.Credential)
-                .Include(i => i.Comments)
                 .Where(x => x.Credential.Email == email && x.Credential.Password == password)
                 .SingleAsync();
 
@@ -34,9 +33,10 @@ namespace WebAPI.Helpers
                 await _dbContext.SaveChangesAsync();
             }
 
-            var tokenDTO = _jwtService.GenerateJWTToken(userModel);
+            var loginDTO = userModel.ToLoginDto();
+            
   
-            return userModel.ToLoginDto(tokenDTO.Token);
+            return loginDTO;
         }
         //public async Task<bool> LogoutAsync(long userId)
         //{

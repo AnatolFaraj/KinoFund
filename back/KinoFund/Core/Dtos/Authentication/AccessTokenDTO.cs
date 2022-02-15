@@ -8,7 +8,6 @@ namespace Core.Dtos.Authentication
 {
     public class AccessTokenDTO
     {
-        public long UserId { get; set; }
         public string Token { get; set; }
     }
 }

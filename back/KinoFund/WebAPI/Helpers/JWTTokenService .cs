@@ -25,11 +25,8 @@ namespace WebAPI.Helpers
             _jwtSettings = jwtSettings.Value;
         }
 
-        
 
-       
-
-        public AccessTokenDTO GenerateJWTToken(UserModel userModel)
+        public AccessTokenDTO GenerateJWTToken(LoginDTO loginDTO)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
@@ -37,10 +34,10 @@ namespace WebAPI.Helpers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("id", userModel.UserId.ToString()),
-                    new Claim(ClaimTypes.Email, userModel.Credential.Email),
-                    new Claim(ClaimTypes.Role, Convert.ToInt32(userModel.Type).ToString()),
-                    new Claim(ClaimTypes.Name, userModel.UserName)
+                    new Claim("id", loginDTO.UserId.ToString()),
+                    new Claim(ClaimTypes.Email, loginDTO.Email),
+                    new Claim(ClaimTypes.Role, Convert.ToInt32(loginDTO.Role).ToString()),
+                    new Claim(ClaimTypes.Name, loginDTO.Name)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -55,7 +52,6 @@ namespace WebAPI.Helpers
 
             return new AccessTokenDTO
             {
-                UserId = userModel.UserId,
                 Token = generatedToken
             };
         }
