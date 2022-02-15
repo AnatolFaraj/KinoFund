@@ -1,5 +1,6 @@
 ﻿using BLL.Users;
 using Core.Dtos.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Roles = "2")]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -19,7 +21,7 @@ namespace WebAPI.Controllers
         {
             _usersManager = usersManager;
         }
-
+       
         [HttpGet("")]
         public async Task<GetAllUsersDto> GetAllAsync()
         {
@@ -27,11 +29,14 @@ namespace WebAPI.Controllers
             return users;
         }
 
+        
         [HttpGet("{userId}/info")]
         public async Task<UserInfoDto> GetInfoAsync(long userId)
         {
             var user = await _usersManager.GetInfoAsync(userId);
             return user;
         }
+
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BLL.Collections;
 using Core.Dtos.Collections;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/collections")]
     [ApiController]
     public class CollectionsController : ControllerBase
