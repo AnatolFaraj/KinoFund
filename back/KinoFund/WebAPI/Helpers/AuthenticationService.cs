@@ -24,15 +24,22 @@ namespace WebAPI.Helpers
         {
             var userModel = await _dbContext.Users
                 .Include(i => i.Credential)
-                .Where(x => x.Credential.Email == email && x.Credential.Password == password)
-                .SingleAsync();
+                .Where(x => x.Credential.Email == email)
+                .SingleOrDefaultAsync();
 
-            if (userModel != null)
+            if (userModel == null)
             {
-                userModel.Credential.LastLoginDate = DateTime.UtcNow;
-                await _dbContext.SaveChangesAsync();
+                throw new Exception("User with such an Email is not found.");
             }
 
+            if(userModel.Credential.Password != password)
+            {
+                throw new Exception("Password is invalid.");
+            }
+
+            userModel.Credential.LastLoginDate = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+            
             var loginDTO = userModel.ToLoginDto();
             
   
