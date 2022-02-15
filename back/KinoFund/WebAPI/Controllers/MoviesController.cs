@@ -54,12 +54,16 @@ namespace WebAPI.Controllers
             return Ok(newMovieId);
         }
 
+
         [Authorize]
+
         [HttpPost("{movieId}/score")]
         public async Task<IActionResult> SetScoreAsync(SetMovieRatingDTO movieRatingDTO)
         {
             var scoredMovieId = await _moviesManager.SetScoreAsync(movieRatingDTO);
+
             
+
             return Ok(scoredMovieId);
         }
 
