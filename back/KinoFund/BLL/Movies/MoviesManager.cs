@@ -28,11 +28,12 @@ namespace BLL.Movies
 
         }
         
-        public async Task<GetAllMoviesDTO> GetAllAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync(string filter)
         {
 
             var movies = await _dbContext.Movies
                 .Include(i => i.Category)
+                .Where(x => x.Title.StartsWith(filter))
                 .ToListAsync();
 
             var movieDtos = new List<MovieDTO>();

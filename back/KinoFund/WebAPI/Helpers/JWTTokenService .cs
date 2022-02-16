@@ -30,13 +30,14 @@ namespace WebAPI.Helpers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var role = Enum.GetName(loginDTO.Role);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("id", loginDTO.UserId.ToString()),
                     new Claim(ClaimTypes.Email, loginDTO.Email),
-                    new Claim(ClaimTypes.Role, Convert.ToInt32(loginDTO.Role).ToString()),
+                    new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.Name, loginDTO.Name)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(10),

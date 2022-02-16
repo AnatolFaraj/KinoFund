@@ -32,6 +32,11 @@ namespace DAL.Repositories
 
             var procedure = _dbContext.Database.ExecuteSqlRaw("spGetTotalMovieRating @movieId, @outputValue OUT", inParam, outParam);
 
+            if(outParam.Value == DBNull.Value)
+            {
+                return 0.0f;
+            }
+
             return Convert.ToSingle(outParam.Value);
         }
 

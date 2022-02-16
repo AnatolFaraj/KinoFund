@@ -24,10 +24,10 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet("")]
-        public async Task<GetAllMoviesDTO> GetAllAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync(string filter)
         {
-            var users = await _moviesManager.GetAllAsync();
-            return users;
+            var movieDTOs = await _moviesManager.GetAllAsync(filter);
+            return movieDTOs;
         }
 
         [Authorize]
@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             return movie;
         }
 
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{movieId}")]
         public async Task<IActionResult> EditAsync(MovieInfoDTO movieModel)
         {
@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
             return Ok(movieModel);
         }
 
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
             return Ok(scoredMovieId);
         }
 
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{movieId}")]
         public async Task<IActionResult> DeleteAsync(long movieId)
         {
