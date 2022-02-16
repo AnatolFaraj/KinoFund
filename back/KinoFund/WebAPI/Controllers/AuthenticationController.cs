@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebAPI.Helpers;
 
@@ -15,19 +16,19 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly AuthenticationService _autManager;
+        private readonly AuthenticationService _autService;
         private readonly JWTTokenService _jwtService;
 
         public AuthenticationController(AuthenticationService authManager, JWTTokenService jwtService)
         {
-            _autManager = authManager;
+            _autService = authManager;
             _jwtService = jwtService;
         }
 
         [HttpGet("login")]
         public async Task<IActionResult> LoginAsync(string email, string password)
         {
-            var loginDTO = await _autManager.LoginAsync(email, password);
+            var loginDTO = await _autService.LoginAsync(email, password);
             var tokenDTO = _jwtService.GenerateJWTToken(loginDTO);
 
             return Ok(tokenDTO);
@@ -36,16 +37,17 @@ namespace WebAPI.Controllers
         [HttpPost("registration")]
         public async Task<IActionResult> RegisterAsync(RegistrationDTO registrationDTO)
         {
-            var newUserId = await _autManager.RegisterAsync(registrationDTO);
+            var newUserId = await _autService.RegisterAsync(registrationDTO);
             return Ok(newUserId);
         }
 
-        //[Authorize]
-        //[HttpDelete("logout")]
-        //public async Task<IActionResult> LogoutAsync()
-        //{
-            
-        //    throw new NotImplementedException();
-        //}
+        [Authorize]
+        [HttpPut("logout")]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            var userId = Convert.ToInt64(HttpContext.User.FindFirstValue("id"));
+            await _autService.LogoutAsync(userId);
+            return NoContent();
+        }
     }
 }

@@ -138,6 +138,9 @@ namespace DAL.Migrations
                     b.Property<DateTime?>("LastLoginDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("LastLogoutDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 

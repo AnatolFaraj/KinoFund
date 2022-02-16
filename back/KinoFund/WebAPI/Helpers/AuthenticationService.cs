@@ -45,12 +45,17 @@ namespace WebAPI.Helpers
   
             return loginDTO;
         }
-        //public async Task<bool> LogoutAsync(long userId)
-        //{
-        //    await _jwtRepo.DeleteToken(userId);
+        public async Task<bool> LogoutAsync(long userId)
+        {
+            var userModel = await _dbContext.Users
+                .Include(i => i.Credential)
+                .Where(x => x.UserId == userId).SingleAsync();
 
-        //    return true;
-        //}
+            userModel.Credential.LastLogoutDate = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
 
         public async Task<long> RegisterAsync(RegistrationDTO registrationDTO)
         {
