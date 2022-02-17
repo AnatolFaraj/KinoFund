@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{collectionId}")]
-        public async Task<IActionResult> EditAsync(EditCollectionDTO collection)
+        public async Task<IActionResult> EditAsync(long collectionId, EditCollectionDTO collection)
         {
 
             await _collectionsManager.EditAsync(collection, _userClaims.Role, _userClaims.Id);
