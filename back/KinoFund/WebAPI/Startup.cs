@@ -22,7 +22,10 @@ using Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
 using WebAPI.Infrastructure;
+
+
 
 
 namespace WebAPI
@@ -61,6 +64,38 @@ namespace WebAPI
             services.AddTransient<AuthenticationService>();
             services.AddTransient<JWTTokenService>();
             services.AddHttpContextAccessor();
+
+            var jwtSection = Configuration.GetSection("JWTsettings");
+            services.Configure<JWTSettings>(jwtSection);
+
+
+            var key = Encoding.ASCII.GetBytes(jwtSection.Get<JWTSettings>().SecretKey);
+
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(
+                options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
+                    };
+
+                });
+
+
+            services.AddTransient<AuthenticationService>();
+            services.AddTransient<JWTTokenService>();
 
             var jwtSection = Configuration.GetSection("JWTsettings");
             services.Configure<JWTSettings>(jwtSection);

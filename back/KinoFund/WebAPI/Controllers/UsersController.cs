@@ -1,6 +1,8 @@
 ﻿using BLL.Users;
 using Core.Dtos.Users;
+
 using Core.Dtos.Authentication;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,9 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+
     [Authorize(Roles = AuthConsts.Admin)]
+
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
