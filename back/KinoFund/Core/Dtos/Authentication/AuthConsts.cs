@@ -1,6 +1,6 @@
 ﻿
 
-namespace WebAPI.Infrastructure
+namespace Core.Dtos.Authentication
 {
     public class AuthConsts
     {

@@ -1,4 +1,5 @@
 ﻿using BLL.Movies;
+using Core.Dtos.Authentication;
 using Core.Dtos.Movies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

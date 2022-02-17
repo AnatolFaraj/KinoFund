@@ -1,4 +1,5 @@
-﻿using Core.Dtos.Collections;
+﻿using Core.Dtos.Authentication;
+using Core.Dtos.Collections;
 using Core.Dtos.Movies;
 using Core.Models;
 using DAL.data;
@@ -35,10 +36,10 @@ namespace BLL.Collections
 
                 }).ToListAsync();
 
-            if(role == "User")
+            if(role == AuthConsts.User)
             {
                 var privateCollections = collections
-                    .Where(x => Enum.GetName(x.Type) == "Private" && x.Author != userName)
+                    .Where(x => Enum.GetName(x.Type) == CollectionConsts.Private && x.Author != userName)
                     .ToList();
 
                 var publicCollections = collections
@@ -67,7 +68,7 @@ namespace BLL.Collections
                 
                 .FirstAsync(c => c.CollectionId == collectionId);
 
-            if(userRole == "User" && Enum.GetName(collection.Type) == "Private" && collection.UserId != userId)
+            if(userRole == AuthConsts.User && Enum.GetName(collection.Type) == CollectionConsts.Private && collection.UserId != userId)
             {
                 throw new Exception("The collection is private");
             }
@@ -108,7 +109,7 @@ namespace BLL.Collections
                 .Where(c => c.CollectionId == collectionDTO.CollectionId)
                 .FirstOrDefaultAsync();
 
-            if(userRole == "User" && userId != collectionModel.UserId)
+            if(userRole == AuthConsts.User && userId != collectionModel.UserId)
             {
                 throw new Exception("You can't modify other people's collections");
             }
@@ -136,7 +137,7 @@ namespace BLL.Collections
                 .Where(c => c.CollectionId == collectionId)
                 .FirstAsync();
 
-            if(userRole == "User" && collection.UserId != userId)
+            if(userRole == AuthConsts.User && collection.UserId != userId)
             {
                 throw new Exception("You can't delete other people's collections");
             }

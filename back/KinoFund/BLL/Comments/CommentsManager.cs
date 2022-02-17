@@ -1,4 +1,5 @@
-﻿using Core.Dtos.Comments;
+﻿using Core.Dtos.Authentication;
+using Core.Dtos.Comments;
 using Core.Models;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
@@ -75,7 +76,7 @@ namespace BLL.Comments
                 .Where(c => c.CommentId == commentDTO.CommentId)
                 .FirstOrDefaultAsync();
 
-            if(userRole == "User" && commentModel.UserId != userId)
+            if(userRole == AuthConsts.User && commentModel.UserId != userId)
             {
                 throw new Exception("You can't edit other user's comments");
             }
@@ -115,7 +116,7 @@ namespace BLL.Comments
                 .Where(c => c.CommentId == commentId)
                 .FirstOrDefaultAsync();
 
-            if(userRole == "User" && comment.UserId != userId)
+            if(userRole == AuthConsts.User && comment.UserId != userId)
             {
                 throw new Exception("You can't delete other user's comments");
             }
