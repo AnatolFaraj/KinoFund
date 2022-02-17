@@ -41,7 +41,9 @@ namespace WebAPI.Controllers
             return movie;
         }
 
+
         [Authorize(Roles = AuthConsts.Admin)]
+
         [HttpPut("{movieId}")]
         public async Task<IActionResult> EditAsync(long movieId, MovieInfoDTO movieDTO)
         {
@@ -49,7 +51,10 @@ namespace WebAPI.Controllers
             return Ok(movieDTO);
         }
 
+
         [Authorize(Roles = AuthConsts.Admin)]
+
+
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
@@ -62,12 +67,14 @@ namespace WebAPI.Controllers
 
         [HttpPost("{movieId}/score")]
         public async Task<IActionResult> SetScoreAsync(SetMovieRatingDTO movieRatingDTO)
+
         { 
             var scoredMovieId = await _moviesManager.SetScoreAsync(movieRatingDTO, _userClaims.Id);
             return Ok(scoredMovieId);
         }
 
         [Authorize(Roles = AuthConsts.Admin)]
+
         [HttpDelete("{movieId}")]
         public async Task<IActionResult> DeleteAsync(long movieId)
         {
