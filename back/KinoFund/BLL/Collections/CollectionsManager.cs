@@ -38,17 +38,13 @@ namespace BLL.Collections
 
             if(role == AuthConsts.User)
             {
-                var privateCollections = collections
-                    .Where(x => Enum.GetName(x.Type) == CollectionConsts.Private && x.Author != userName)
-                    .ToList();
-
-                var publicCollections = collections
-                    .Except(privateCollections)
+                var userCollections = collections
+                    .Where(x => Enum.GetName(x.Type) == CollectionConsts.Public || x.Author == userName)
                     .ToList();
 
                 return new GetAllCollectionsDTO
                 {
-                    Collections = publicCollections
+                    Collections = userCollections
                 };
             }
             

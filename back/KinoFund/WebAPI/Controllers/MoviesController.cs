@@ -27,9 +27,9 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet("")]
-        public async Task<GetAllMoviesDTO> GetAllAsync(string filter)
+        public async Task<GetAllMoviesDTO> GetAllAsync(string titleFilter, float? ratingFilter, string categoryFilter)
         {
-            var movieDTOs = await _moviesManager.GetAllAsync(filter);
+            var movieDTOs = await _moviesManager.GetAllAsync(titleFilter, ratingFilter, categoryFilter);
             return movieDTOs;
         }
 

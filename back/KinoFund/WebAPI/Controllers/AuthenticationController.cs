@@ -44,12 +44,12 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut("logout")]
+        [HttpGet("logout")]
         public async Task<IActionResult> LogoutAsync()
         {
 
             await _autService.LogoutAsync(_userClaims.Id);
-            return NoContent();
+            return Ok();
         }
     }
 }

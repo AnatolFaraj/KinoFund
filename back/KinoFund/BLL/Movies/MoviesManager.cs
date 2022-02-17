@@ -28,16 +28,22 @@ namespace BLL.Movies
 
         }
         
-        public async Task<GetAllMoviesDTO> GetAllAsync(string filter)
+        public async Task<GetAllMoviesDTO> GetAllAsync(string titleFilter, float? ratingFilter, string categoryFilter)
         {
-            if(filter == null)
+            if(titleFilter == null)
             {
-                filter = string.Empty;
+                titleFilter = string.Empty;
+            }
+
+            if(categoryFilter == null)
+            {
+                categoryFilter = string.Empty;
             }
 
             var movies = await _dbContext.Movies
                 .Include(i => i.Category)
-                .Where(x => x.Title.StartsWith(filter))
+                .Where(x => x.Title.StartsWith(titleFilter))
+                .Where(x => x.Category.Name.StartsWith(categoryFilter))
                 .ToListAsync();
 
 
@@ -48,6 +54,17 @@ namespace BLL.Movies
                 var rating = _ratingRepo.GetValueByMovieId(movie.MovieId);
                 movieDtos.Add(movie.ToDto(rating));
             }
+
+            if(ratingFilter != null)
+            {
+                var filteredMovieDTOs = movieDtos.Where(x => x.Rating == ratingFilter).ToList();
+
+                return new GetAllMoviesDTO
+                {
+                    Movies = filteredMovieDTOs
+                };
+            }
+            
 
             return new GetAllMoviesDTO
             {
