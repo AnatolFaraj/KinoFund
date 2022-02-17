@@ -20,7 +20,7 @@ namespace BLL.Collections
             _dbContext = context;
         }
 
-        public async Task<GetAllCollectionsDTO> GetAllAsync()
+        public async Task<GetAllCollectionsDTO> GetAllAsync(string role, string userName)
         {
             var collections = await _dbContext.Collections
                 .Include(i => i.Movies)
@@ -35,13 +35,30 @@ namespace BLL.Collections
 
                 }).ToListAsync();
 
+            if(role == "User")
+            {
+                var privateCollections = collections
+                    .Where(x => Enum.GetName(x.Type) == "Private" && x.Author != userName)
+                    .ToList();
+
+                var publicCollections = collections
+                    .Except(privateCollections)
+                    .ToList();
+
+                return new GetAllCollectionsDTO
+                {
+                    Collections = publicCollections
+                };
+            }
+            
+
             return new GetAllCollectionsDTO
             {
                 Collections = collections,
             };
         }
 
-        public async Task<CollectionInfoDTO> GetInfoAsync(long collectionId)
+        public async Task<CollectionInfoDTO> GetInfoAsync(long collectionId, string userRole, long userId)
         {
             var collection = await _dbContext.Collections
                 .Include(i => i.Movies)
@@ -50,15 +67,21 @@ namespace BLL.Collections
                 
                 .FirstAsync(c => c.CollectionId == collectionId);
 
+            if(userRole == "User" && Enum.GetName(collection.Type) == "Private" && collection.UserId != userId)
+            {
+                throw new Exception("The collection is private");
+            }
+
             var movies = collection.Movies.Select(x => new CollectionMovieDTO
             { 
                 MovieId = x.MovieId
+
             }).ToList();
 
             return collection.ToDto(movies);
         }
 
-        public async Task<long> CreateAsync(CreateCollectionDTO collectionDTO)
+        public async Task<long> CreateAsync(CreateCollectionDTO collectionDTO, long userId)
         {
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
@@ -68,7 +91,7 @@ namespace BLL.Collections
             {
                 Name = collectionDTO.Name,
                 Type = collectionDTO.Type,
-                UserId = collectionDTO.UserId,
+                UserId = userId,
                 Movies = movieModels
             };
             _dbContext.Collections.Add(collectionModel);
@@ -79,11 +102,16 @@ namespace BLL.Collections
         }
 
 
-        public async Task<bool> EditAsync(EditCollectionDTO collectionDTO)
+        public async Task<bool> EditAsync(EditCollectionDTO collectionDTO, string userRole, long userId)
         {
             var collectionModel = await _dbContext.Collections
                 .Where(c => c.CollectionId == collectionDTO.CollectionId)
                 .FirstOrDefaultAsync();
+
+            if(userRole == "User" && userId != collectionModel.UserId)
+            {
+                throw new Exception("You can't modify other people's collections");
+            }
 
             var movieIds = collectionDTO.Movies.Select(x => x.MovieId).ToList();
             var movieModels = await _dbContext.Movies.Where(x => movieIds.Contains(x.MovieId)).ToListAsync();
@@ -102,11 +130,16 @@ namespace BLL.Collections
 
         }
 
-        public async Task<bool> DeleteAsync(long collectionId)
+        public async Task<bool> DeleteAsync(long collectionId, string userRole, long userId)
         {
             var collection = await _dbContext.Collections
                 .Where(c => c.CollectionId == collectionId)
                 .FirstAsync();
+
+            if(userRole == "User" && collection.UserId != userId)
+            {
+                throw new Exception("You can't delete other people's collections");
+            }
 
             _dbContext.Collections.Remove(collection);
             await _dbContext.SaveChangesAsync();

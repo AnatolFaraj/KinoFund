@@ -1,18 +1,13 @@
 ﻿using Core.Configuration;
 using Core.Dtos.Authentication;
-using Core.Interfaces;
-using Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace WebAPI.Helpers
+namespace WebAPI.Infrastructure
 {
     public class JWTTokenService 
     {
@@ -40,7 +35,7 @@ namespace WebAPI.Helpers
                     new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.Name, loginDTO.Name)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature),
                 

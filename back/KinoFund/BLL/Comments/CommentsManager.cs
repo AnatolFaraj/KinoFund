@@ -20,7 +20,7 @@ namespace BLL.Comments
         }
         
 
-        private List<CommentDTO> GetCommetsDTO(List<CommentModel> comments)
+        private List<CommentDTO> GetCommentsDTO(List<CommentModel> comments)
         {
             return comments.Select(c => new CommentDTO 
             { 
@@ -48,7 +48,7 @@ namespace BLL.Comments
                 .ToListAsync();
 
 
-            var commentDTO = GetCommetsDTO(allCommentsByMovie);
+            var commentDTO = GetCommentsDTO(allCommentsByMovie);
 
 
             return new GetAllComentsDTO
@@ -65,15 +65,20 @@ namespace BLL.Comments
                 .Where(x => x.RefersToCommentId == commentId)
                 .ToListAsync();
 
-            return GetCommetsDTO(allSubCommentsByComment);
+            return GetCommentsDTO(allSubCommentsByComment);
         }
         
 
-        public async Task<bool> EditAsync(EditCommentDto commentDTO)
+        public async Task<bool> EditAsync(EditCommentDto commentDTO, string userRole, long userId)
         {
             var commentModel = await _dbContext.Comments
                 .Where(c => c.CommentId == commentDTO.CommentId)
                 .FirstOrDefaultAsync();
+
+            if(userRole == "User" && commentModel.UserId != userId)
+            {
+                throw new Exception("You can't edit other user's comments");
+            }
 
             if(commentModel != null)
             {
@@ -85,11 +90,12 @@ namespace BLL.Comments
             return true;
         }
 
-        public async Task<long> CreateAsync(CreateCommentDTO commentDTO)
+        public async Task<long> CreateAsync(CreateCommentDTO commentDTO, long userId)
         {
+            
             var commentModel = new CommentModel()
             {
-                UserId = commentDTO.UserId,
+                UserId = userId,
                 MovieId = commentDTO.MovieId,
                 Text = commentDTO.Text,
                 RefersToCommentId = commentDTO.ParentId
@@ -103,15 +109,22 @@ namespace BLL.Comments
 
 
 
-        public async Task<bool> DeleteAsync(long commentId)
+        public async Task<bool> DeleteAsync(long commentId, string userRole, long userId)
         {
             var comment = await _dbContext.Comments
                 .Where(c => c.CommentId == commentId)
                 .FirstOrDefaultAsync();
 
+            if(userRole == "User" && comment.UserId != userId)
+            {
+                throw new Exception("You can't delete other user's comments");
+            }
+
             _dbContext.Comments.Remove(comment);
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+       
     }
 }

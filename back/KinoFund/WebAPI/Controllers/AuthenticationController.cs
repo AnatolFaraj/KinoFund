@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebAPI.Helpers;
+using WebAPI.Infrastructure;
 
 namespace WebAPI.Controllers
 {
@@ -18,11 +18,13 @@ namespace WebAPI.Controllers
     {
         private readonly AuthenticationService _autService;
         private readonly JWTTokenService _jwtService;
+        private readonly UserClaims _userClaims;
 
-        public AuthenticationController(AuthenticationService authManager, JWTTokenService jwtService)
+        public AuthenticationController(AuthenticationService authManager, JWTTokenService jwtService, UserClaims userClaims)
         {
             _autService = authManager;
             _jwtService = jwtService;
+            _userClaims = userClaims;
         }
 
         [HttpGet("login")]
@@ -45,8 +47,8 @@ namespace WebAPI.Controllers
         [HttpPut("logout")]
         public async Task<IActionResult> LogoutAsync()
         {
-            var userId = Convert.ToInt64(HttpContext.User.FindFirstValue("id"));
-            await _autService.LogoutAsync(userId);
+
+            await _autService.LogoutAsync(_userClaims.Id);
             return NoContent();
         }
     }
