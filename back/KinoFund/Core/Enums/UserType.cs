@@ -8,6 +8,6 @@ namespace Core.Enums
     public enum UserType
     {
         User = 1,
-        Admin
+        Admin = 2
     }
 }

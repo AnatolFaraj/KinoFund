@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
         public async Task<GetAllCollectionsDTO> GetAllAsync()
         {
 
-            var collections = await _collectionsManager.GetAllAsync(_userClaims.Role, _userClaims.Name);
+            var collections = await _collectionsManager.GetAllAsync(_userClaims.Role, _userClaims.Id);
             return collections;
         }
 

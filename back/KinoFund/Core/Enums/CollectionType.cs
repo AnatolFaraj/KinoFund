@@ -8,6 +8,6 @@ namespace Core.Enums
     public enum CollectionType
     {
         Public = 1,
-        Private
+        Private = 2 
     }
 }

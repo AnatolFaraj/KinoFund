@@ -1,9 +1,11 @@
 ﻿using Core.Dtos.Authentication;
 using Core.Dtos.Collections;
 using Core.Dtos.Movies;
+using Core.Enums;
 using Core.Models;
 using DAL.data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,33 +23,29 @@ namespace BLL.Collections
             _dbContext = context;
         }
 
-        public async Task<GetAllCollectionsDTO> GetAllAsync(string role, string userName)
+        public async Task<GetAllCollectionsDTO> GetAllAsync(string role, long userId)
         {
-            var collections = await _dbContext.Collections
+            IQueryable<CollectionModel> collectionsQuery =  _dbContext.Collections
                 .Include(i => i.Movies)
-                .Include(i => i.User)
-                .Select(c => new CollectionDTO
-                {
-                    CollectionId = c.CollectionId,
-                    Name = c.Name,
-                    Author = c.User.UserName,
-                    Type = c.Type,
-                    MoviesCount = c.Movies.Count
+                .Include(i => i.User);
 
-                }).ToListAsync();
 
             if(role == AuthConsts.User)
             {
-                var userCollections = collections
-                    .Where(x => Enum.GetName(x.Type) == CollectionConsts.Public || x.Author == userName)
-                    .ToList();
+                collectionsQuery = collectionsQuery.Where(x => x.Type == CollectionType.Public || x.UserId == userId);
 
-                return new GetAllCollectionsDTO
-                {
-                    Collections = userCollections
-                };
             }
-            
+
+            var collections = await collectionsQuery.Select(c => new CollectionDTO
+            {
+                CollectionId = c.CollectionId,
+                Name = c.Name,
+                Author = c.User.UserName,
+                Type = c.Type,
+                MoviesCount = c.Movies.Count
+
+            }).ToListAsync();
+
 
             return new GetAllCollectionsDTO
             {
@@ -64,7 +62,7 @@ namespace BLL.Collections
                 
                 .FirstAsync(c => c.CollectionId == collectionId);
 
-            if(userRole == AuthConsts.User && Enum.GetName(collection.Type) == CollectionConsts.Private && collection.UserId != userId)
+            if(userRole == AuthConsts.User && collection.Type == CollectionType.Private && collection.UserId != userId)
             {
                 throw new Exception("The collection is private");
             }
