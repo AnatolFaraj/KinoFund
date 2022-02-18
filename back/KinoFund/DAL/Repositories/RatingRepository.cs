@@ -25,7 +25,7 @@ namespace DAL.Repositories
             var outParam = new SqlParameter
             {
                 ParameterName = "@outputValue",
-                SqlDbType = System.Data.SqlDbType.Int,
+                SqlDbType = System.Data.SqlDbType.Float,
                 Direction = System.Data.ParameterDirection.Output,
 
             };
