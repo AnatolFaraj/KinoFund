@@ -7,7 +7,7 @@ namespace Core.Enums
 {
     public enum UserType
     {
-        User,
-        Admin
+        User = 1,
+        Admin = 2
     }
 }

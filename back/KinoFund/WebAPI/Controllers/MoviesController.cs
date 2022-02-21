@@ -1,4 +1,5 @@
 ﻿using BLL.Movies;
+using Core.Dtos.Authentication;
 using Core.Dtos.Movies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using WebAPI.Infrastructure;
 
 namespace WebAPI.Controllers
 {
@@ -16,18 +18,19 @@ namespace WebAPI.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly MoviesManager _moviesManager;
-
-        public MoviesController(MoviesManager moviesManager)
+        private readonly UserClaims _userClaims; 
+        public MoviesController(MoviesManager moviesManager, UserClaims userClaims)
         {
             _moviesManager = moviesManager;
+            _userClaims = userClaims;
         }
 
         [Authorize]
         [HttpGet("")]
-        public async Task<GetAllMoviesDTO> GetAllAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync(string titleFilter, float? minRatingFilter, string categoryFilter)
         {
-            var users = await _moviesManager.GetAllAsync();
-            return users;
+            var movieDTOs = await _moviesManager.GetAllAsync(titleFilter, minRatingFilter, categoryFilter);
+            return movieDTOs;
         }
 
         [Authorize]
@@ -38,15 +41,20 @@ namespace WebAPI.Controllers
             return movie;
         }
 
-        [Authorize(Roles = "2")]
+
+        [Authorize(Roles = AuthConsts.Admin)]
+
         [HttpPut("{movieId}")]
-        public async Task<IActionResult> EditAsync(MovieInfoDTO movieModel)
+        public async Task<IActionResult> EditAsync(long movieId, MovieInfoDTO movieDTO)
         {
-            await _moviesManager.EditAsync(movieModel);
-            return Ok(movieModel);
+            await _moviesManager.EditAsync(movieDTO);
+            return Ok(movieDTO);
         }
 
-        [Authorize(Roles = "2")]
+
+        [Authorize(Roles = AuthConsts.Admin)]
+
+
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync(MovieInfoDTO movieModel)
         {
@@ -59,15 +67,14 @@ namespace WebAPI.Controllers
 
         [HttpPost("{movieId}/score")]
         public async Task<IActionResult> SetScoreAsync(SetMovieRatingDTO movieRatingDTO)
-        {
-            var scoredMovieId = await _moviesManager.SetScoreAsync(movieRatingDTO);
 
-            
-
+        { 
+            var scoredMovieId = await _moviesManager.SetScoreAsync(movieRatingDTO, _userClaims.Id);
             return Ok(scoredMovieId);
         }
 
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = AuthConsts.Admin)]
+
         [HttpDelete("{movieId}")]
         public async Task<IActionResult> DeleteAsync(long movieId)
         {

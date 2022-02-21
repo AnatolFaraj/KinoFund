@@ -84,7 +84,8 @@ namespace DAL.Migrations
                     ResetPasswordKey = table.Column<long>(type: "bigint", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastLogoutDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

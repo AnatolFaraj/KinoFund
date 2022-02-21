@@ -25,12 +25,17 @@ namespace DAL.Repositories
             var outParam = new SqlParameter
             {
                 ParameterName = "@outputValue",
-                SqlDbType = System.Data.SqlDbType.Int,
+                SqlDbType = System.Data.SqlDbType.Float,
                 Direction = System.Data.ParameterDirection.Output,
 
             };
 
             var procedure = _dbContext.Database.ExecuteSqlRaw("spGetTotalMovieRating @movieId, @outputValue OUT", inParam, outParam);
+
+            if(outParam.Value == DBNull.Value)
+            {
+                return 0.0f;
+            }
 
             return Convert.ToSingle(outParam.Value);
         }

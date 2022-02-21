@@ -7,7 +7,7 @@ namespace Core.Enums
 {
     public enum CollectionType
     {
-        Public,
-        Private
+        Public = 1,
+        Private = 2 
     }
 }

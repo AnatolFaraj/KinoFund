@@ -21,7 +21,7 @@ namespace DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CollectionMovie", b =>
+            modelBuilder.Entity("CollectionModelMovieModel", b =>
                 {
                     b.Property<long>("CollectionsCollectionId")
                         .HasColumnType("bigint");
@@ -33,7 +33,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("MoviesMovieId");
 
-                    b.ToTable("CollectionMovie");
+                    b.ToTable("CollectionModelMovieModel");
                 });
 
             modelBuilder.Entity("Core.Models.Category", b =>
@@ -126,6 +126,9 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastLogoutDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")

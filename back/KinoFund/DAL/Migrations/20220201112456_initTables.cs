@@ -96,6 +96,17 @@ namespace DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DeleteData(
+                table: "Comments",
+                keyColumn: "CommentID",
+                keyValue: 2L);
+
+            migrationBuilder.DeleteData(
+                table: "Comments",
+                keyColumn: "CommentID",
+                keyValue: 1L);
+
+            
 
             migrationBuilder.DeleteData(
                 table: "Categories",
@@ -142,15 +153,7 @@ namespace DAL.Migrations
                 keyColumn: "UserID",
                 keyValue: 3L);
 
-            migrationBuilder.DeleteData(
-                table: "Comments",
-                keyColumn: "CommentID",
-                keyValue: 1L);
-
-            migrationBuilder.DeleteData(
-                table: "Comments",
-                keyColumn: "CommentID",
-                keyValue: 2L);
+            
 
             migrationBuilder.DeleteData(
                 table: "Collections",

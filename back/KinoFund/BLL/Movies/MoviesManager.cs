@@ -28,14 +28,33 @@ namespace BLL.Movies
 
         }
         
-        public async Task<GetAllMoviesDTO> GetAllAsync()
+        public async Task<GetAllMoviesDTO> GetAllAsync(string titleFilter, float? minRatingFilter, string categoryFilter)
         {
+            
 
-            var movies = await _dbContext.Movies
-                .Include(i => i.Category)
-                .ToListAsync();
+            IQueryable<MovieModel> moviesQuery = _dbContext.Movies
+                .Include(i => i.Category);
+
+                
+
+            if(!string.IsNullOrEmpty(titleFilter))
+            {
+                moviesQuery = moviesQuery.Where(x => x.Title.StartsWith(titleFilter));
+            }
+
+            if (minRatingFilter != null)
+            {
+                moviesQuery = moviesQuery.Where(x => x.Ratings.Select(x => x.Value).Average() >= minRatingFilter);
+            }
+
+            if (!string.IsNullOrEmpty(categoryFilter))
+            {
+                moviesQuery = moviesQuery.Where(x => x.Category.Name.StartsWith(categoryFilter));
+            }
+
 
             var movieDtos = new List<MovieDTO>();
+            var movies = await moviesQuery.ToListAsync();
 
             foreach (var movie in movies)
             {
@@ -130,11 +149,13 @@ namespace BLL.Movies
             return true;
         }
 
-        public async Task<long> SetScoreAsync(SetMovieRatingDTO ratingDTO)
+        public async Task<long> SetScoreAsync(SetMovieRatingDTO ratingDTO, long userId)
         {
             var ratingModel = new RatingModel()
             {
                 MovieId = ratingDTO.MovieId,
+
+                UserId = userId,
 
                 Value = ratingDTO.Value
             };

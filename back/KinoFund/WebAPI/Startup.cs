@@ -22,7 +22,10 @@ using Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebAPI.Helpers;
+
+using WebAPI.Infrastructure;
+
+
 
 
 namespace WebAPI
@@ -57,9 +60,10 @@ namespace WebAPI
             services.AddTransient<CollectionsManager>();
             services.AddTransient<FileService>();
             services.AddTransient<FilesManager>();
-
+            services.AddTransient<UserClaims>();
             services.AddTransient<AuthenticationService>();
             services.AddTransient<JWTTokenService>();
+            services.AddHttpContextAccessor();
 
             var jwtSection = Configuration.GetSection("JWTsettings");
             services.Configure<JWTSettings>(jwtSection);
@@ -88,6 +92,9 @@ namespace WebAPI
                     };
 
                 });
+
+
+
 
 
         }
